@@ -1,0 +1,215 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ThemeToggle from '../../components/ThemeToggle.tsx';
+import { getPortfolio } from '../../data/portfolio';
+import { ArrowLeft, Bug, Zap, Eye, ShieldCheck } from 'lucide-react';
+
+const portfolio = getPortfolio('en');
+const { contact } = portfolio;
+---
+
+<Layout 
+  title="CultureNow | Accessibility & Performance Optimization Case Study" 
+  description="Deep dive into Saurabh Shakya's work at Accenture maintaining CultureNow, optimizing Web Vitals, solving render bottlenecks, and ensuring WCAG compliance."
+>
+  <!-- Nav -->
+  <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
+    <a href="/" class="brutal-border-sm brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-3 py-1.5 font-mono text-xs font-black uppercase border-current flex items-center gap-1.5" aria-label="Back to landing page">
+      <ArrowLeft className="w-3.5 h-3.5 stroke-[2.5]" />
+      <span>BACK TO HOME</span>
+    </a>
+    <div class="flex items-center gap-3">
+      <ThemeToggle client:load />
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 md:py-16 flex flex-col gap-12 font-mono">
+    <!-- Header -->
+    <header class="flex flex-col gap-4 border-b-3 border-current pb-8">
+      <div class="flex flex-wrap gap-2">
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border-amber-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Interactive Map
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Core Web Vitals
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300 border-purple-400 text-[10px] font-extrabold uppercase tracking-wide">
+          WCAG Accessibility
+        </span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none">
+        CultureNow Portal
+      </h1>
+      <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
+        Improving stability, mobile performance, and screen reader accessibility for a public-domain cultural mapping platform.
+      </p>
+    </header>
+
+    <!-- Context & High Level Problem -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      <div class="md:col-span-2 flex flex-col gap-6">
+        <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Challenge & Context</h2>
+        <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+          CultureNow functions as a digital public registry and museum guide, mapping thousands of art installations, historical locations, and architectural sights.
+        </p>
+        <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+          During my tenure at Accenture, the platform faced stability issues due to historical browser-specific rendering bugs, unoptimized script loading, and compliance gaps preventing visually impaired users from navigating content.
+        </p>
+      </div>
+
+      <div class="brutal-border bg-zinc-50 dark:bg-zinc-900 p-6 border-current flex flex-col gap-4">
+        <h3 class="font-black text-xs uppercase border-b border-dashed border-current pb-2">Key Metrics</h3>
+        <ul class="flex flex-col gap-3 text-[10px]">
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Issues Resolved:</span>
+            <span class="font-bold text-emerald-500 dark:text-emerald-400">30+ production tickets</span>
+          </li>
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Audits Implemented:</span>
+            <span class="font-bold">Lighthouse integration</span>
+          </li>
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Compliance Standard:</span>
+            <span class="font-bold">WCAG A11y baseline</span>
+          </li>
+          <li class="flex justify-between pb-1">
+            <span class="text-zinc-400">HMR / CI Speedup:</span>
+            <span class="font-bold">Web Vitals checkpoints</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Bug Triage & Maintenance (STAR) -->
+    <section class="brutal-border border-current p-6 brutal-shadow bg-white dark:bg-zinc-950 flex flex-col gap-6">
+      <div class="border-b border-dashed border-current pb-2">
+        <h2 class="text-lg font-black uppercase text-[#2563EB]">Production Stability Triage</h2>
+        <p class="text-[10px] text-zinc-400">Addressing high-priority tickets systematically to stabilize core workflows</p>
+      </div>
+
+      <div class="flex flex-col gap-4 text-xs">
+        <div class="flex flex-col gap-1">
+          <span class="font-bold text-[#2563EB] text-[10px] uppercase">Situation</span>
+          <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            The legacy application suffered from recurring frontend bugs, visual regressions, and interface misalignments across different device browsers, causing user drop-offs.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="font-bold text-[#2563EB] text-[10px] uppercase">Task</span>
+          <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            Triage, debug, and resolve high-priority visual and functional issues, while implementing preventive audit measures in our workflow.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="font-bold text-[#2563EB] text-[10px] uppercase">Action</span>
+          <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            I analyzed issue patterns using Chrome DevTools, network traces, and user session error logs. I fixed rendering bugs in map modules, optimized asynchronous asset loading, resolved style regressions, and modified raw input elements to support screen-reader visibility landmarks.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="font-bold text-[#2563EB] text-[10px] uppercase">Result</span>
+          <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            Successfully resolved 30+ critical production tickets. Stabilized core navigation flows, improved lighthouse scores, and secured clean screen-reader output for mapping layouts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Work Focus -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Engineering Highlights</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Production Bugs -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Bug className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Legacy Triage Process</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Triaged tickets by severity and created a central registry documenting common frontend regressions (like incorrect absolute offsets and layout overlaps in older Safari browsers), reducing recurring bug frequencies.
+          </p>
+        </div>
+
+        <!-- Web Vitals -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Zap className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Web Vitals Audit Checkpoints</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Introduced Lighthouse audits (tracking Largest Contentful Paint LCP, Cumulative Layout Shift CLS, and Interaction to Next Paint INP) into the pipeline, identifying and removing render-blocking inline style modules.
+          </p>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Eye className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">WCAG Accessibility (A11y)</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Optimized interactive mapping filters for keyboard navigation. Ensured correct screen-reader announcements by applying descriptive ARIA labels, focus state rings, and semantic landmarks across layouts.
+          </p>
+        </div>
+
+        <!-- Integration Testing -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <ShieldCheck className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Component Unit Testing</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Authored unit tests using Jest and Karma/Jasmine to cover regression-prone routing filters and layout boundaries, securing high regression protection metrics for future product improvements.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Platform Link -->
+    <section class="flex flex-col gap-4 border-t-3 border-current pt-8">
+      <div class="flex flex-col gap-2">
+        <h3 class="font-black text-xs uppercase text-[#2563EB]">Live Platform</h3>
+        <p class="text-[10px] text-zinc-500 leading-normal max-w-md font-mono">
+          CultureNow maps thousands of public artworks, architectures, and historical assets across cities. Visit the live directory platform below.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <a 
+          href="https://culturenow.org" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-[#2563EB] text-white px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+          aria-label="Visit CultureNow public museum mapping website"
+        >
+          <Eye className="w-4 h-4" aria-hidden="true" />
+          Visit Website
+        </a>
+      </div>
+    </section>
+
+    <!-- Other Selected Work navigation links -->
+    <section class="flex flex-col gap-4 border-t-3 border-current pt-8 mb-8" aria-label="Other case studies navigation">
+      <h3 class="font-black text-xs uppercase">Other Selected Work Case Studies</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a 
+          href="/work/lender-price" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Lender Price Engine</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/phox-health" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Phox Health Logistics</span>
+          <span>&gt;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>

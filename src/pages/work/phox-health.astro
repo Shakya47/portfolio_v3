@@ -1,0 +1,215 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ThemeToggle from '../../components/ThemeToggle.tsx';
+import { getPortfolio } from '../../data/portfolio';
+import { ArrowLeft, Folders, Cpu, Share2, ShieldAlert } from 'lucide-react';
+
+const portfolio = getPortfolio('en');
+const { contact } = portfolio;
+---
+
+<Layout 
+  title="Phox Health | Clinical Logistics Monorepo Case Study" 
+  description="Deep dive into Saurabh Shakya's work consolidating Phox Health's clinical logistics systems into a unified React Nx Monorepo, optimizing state, notifications, and SEO."
+>
+  <!-- Nav -->
+  <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
+    <a href="/" class="brutal-border-sm brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-3 py-1.5 font-mono text-xs font-black uppercase border-current flex items-center gap-1.5" aria-label="Back to landing page">
+      <ArrowLeft className="w-3.5 h-3.5 stroke-[2.5]" />
+      <span>BACK TO HOME</span>
+    </a>
+    <div class="flex items-center gap-3">
+      <ThemeToggle client:load />
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 md:py-16 flex flex-col gap-12 font-mono">
+    <!-- Header -->
+    <header class="flex flex-col gap-4 border-b-3 border-current pb-8">
+      <div class="flex flex-wrap gap-2">
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border-emerald-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Healthcare
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-400 text-[10px] font-extrabold uppercase tracking-wide">
+          React
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border-amber-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Nx Monorepo
+        </span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none">
+        Phox Health
+      </h1>
+      <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
+        Consolidating clinical delivery logistics systems and medical courier networks into a high-performance React monorepo architecture.
+      </p>
+    </header>
+
+    <!-- Context & High Level Problem -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      <div class="md:col-span-2 flex flex-col gap-6">
+        <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Challenge & Context</h2>
+        <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+          Phox Health is a healthcare logistics platform managing medication deliveries, cold chain packaging, and real-time medical courier courier runs.
+        </p>
+        <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+          Originally, three independent React codebases (for pharmacies, lab networks, and couriers) had grown separately. This resulted in extensive code duplication, inconsistent user experience, desynchronized TypeScript contracts, and slow cross-application features.
+        </p>
+      </div>
+
+      <div class="brutal-border bg-zinc-50 dark:bg-zinc-900 p-6 border-current flex flex-col gap-4">
+        <h3 class="font-black text-xs uppercase border-b border-dashed border-current pb-2">Key Metrics</h3>
+        <ul class="flex flex-col gap-3 text-[10px]">
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Merged Repositories:</span>
+            <span class="font-bold">3 into 1 Monorepo</span>
+          </li>
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Duplication Reduced:</span>
+            <span class="font-bold text-emerald-500 dark:text-emerald-400">~40% code savings</span>
+          </li>
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">User Interaction:</span>
+            <span class="font-bold text-emerald-500 dark:text-emerald-400">+25% push engagement</span>
+          </li>
+          <li class="flex justify-between pb-1">
+            <span class="text-zinc-400">Organic SEO Growth:</span>
+            <span class="font-bold text-emerald-500 dark:text-emerald-400">+20% sitemap indexing</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Architecture Migration: Nx Monorepo -->
+    <section class="brutal-border border-current p-6 brutal-shadow bg-white dark:bg-zinc-950 flex flex-col gap-6">
+      <div class="border-b border-dashed border-current pb-2">
+        <h2 class="text-lg font-black uppercase text-[#2563EB]">Nx Monorepo Consolidation</h2>
+        <p class="text-[10px] text-zinc-400">How we migrated three independent codebases incrementally without downtime</p>
+      </div>
+
+      <div class="flex flex-col gap-4 text-xs">
+        <div class="flex flex-col gap-1">
+          <span class="font-bold text-[#2563EB] text-[10px] uppercase">Situation</span>
+          <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            Developers spent hours manually keeping styles, API contracts, and utilities in sync across multiple repositories. Shared business features had diverging logic branches.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="font-bold text-[#2563EB] text-[10px] uppercase">Task</span>
+          <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            Consolidate codebases into an Nx Monorepo structure, isolating reusable primitives while maintaining app boundaries and CI check velocity.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="font-bold text-[#2563EB] text-[10px] uppercase">Action</span>
+          <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            I designed a modular monorepo directory: split core components into standard UI libraries, isolated logic into utility packages, and created unified TypeScript interfaces. I led the step-by-step incremental migration of each repository and configured `nx affected` commands so CI only runs tests on modified modules.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <span class="font-bold text-[#2563EB] text-[10px] uppercase">Result</span>
+          <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            Removed ~40% of duplicated code structures. CI pipeline execution was optimized, allowing development teams to ship unified features across clinical apps significantly faster.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Optimization Details -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Platform Features</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Monorepo Architecture -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Folders className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Nx Monorepo Boundary Gates</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Enforced strict boundary lint rules within the monorepo configuration (e.g. preventing presentation libraries from directly importing server configurations), eliminating circular references and maintaining code decoupling.
+          </p>
+        </div>
+
+        <!-- Zustand -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Cpu className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Zustand Hook-Based Stores</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Implemented Zustand stores to manage global state boundaries across pharmacy and lab dashboards, replacing heavy Redux boilerplate and deep prop-drilling trees with clean, react-hook subscribers.
+          </p>
+        </div>
+
+        <!-- Service Workers -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Share2 className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Service Worker Push System</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Built an offline-ready service worker layer to negotiate Web Push API subscriptions and alerts, keeping active delivery updates synched and boosting overall courier-patient interactions by 25%.
+          </p>
+        </div>
+
+        <!-- Sitemap.xml -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <ShieldAlert className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Dynamic Sitemap API</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Automated clinical and public page sitemaps by writing an dynamic sitemap.xml Node.js generator script connected directly to directory indexing APIs, increasing search index coverage by 20%.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Platform Link -->
+    <section class="flex flex-col gap-4 border-t-3 border-current pt-8">
+      <div class="flex flex-col gap-2">
+        <h3 class="font-black text-xs uppercase text-[#2563EB]">Live Platform</h3>
+        <p class="text-[10px] text-zinc-500 leading-normal max-w-md font-mono">
+          Note: Phox Health is an enterprise healthcare delivery logistics platform. The link below navigates to the public corporate interface; platform logistics dashboards require active clinical credentials.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <a 
+          href="https://phoxhealth.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-[#2563EB] text-white px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+          aria-label="Visit Phox Health corporate portal website"
+        >
+          <Cpu className="w-4 h-4" aria-hidden="true" />
+          Visit Website
+        </a>
+      </div>
+    </section>
+
+    <!-- Other Selected Work navigation links -->
+    <section class="flex flex-col gap-4 border-t-3 border-current pt-8 mb-8" aria-label="Other case studies navigation">
+      <h3 class="font-black text-xs uppercase">Other Selected Work Case Studies</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a 
+          href="/work/lender-price" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Lender Price Engine</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/note-it-down" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>note-it-down Editor</span>
+          <span>&gt;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>

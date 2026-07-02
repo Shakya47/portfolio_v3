@@ -1,0 +1,384 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ThemeToggle from '../../components/ThemeToggle.tsx';
+import { getPortfolio } from '../../data/portfolio';
+import { ArrowLeft, ExternalLink, ShieldCheck, Zap, Layers, RefreshCw, Key, Cloud, Play } from 'lucide-react';
+
+const portfolio = getPortfolio('en');
+---
+
+<Layout 
+  title="Note It Down | Zero-Knowledge Sync Notepad" 
+  description="Deep dive into note-it-down, a note-taking Chrome Extension leveraging the Document Picture-in-Picture API and zero-knowledge Cloudflare Worker KV sync."
+>
+  <!-- Nav -->
+  <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
+    <a href="/" class="brutal-border-sm brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-3 py-1.5 font-mono text-xs font-black uppercase border-current flex items-center gap-1.5" aria-label="Back to landing page">
+      <ArrowLeft className="w-3.5 h-3.5 stroke-[2.5]" />
+      <span>BACK TO HOME</span>
+    </a>
+    <div class="flex items-center gap-3">
+      <ThemeToggle client:load />
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 md:py-16 flex flex-col gap-12 font-mono">
+    <!-- Header -->
+    <header class="flex flex-col gap-4 border-b-3 border-current pb-8">
+      <div class="flex flex-wrap gap-2">
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Chrome Extension
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 border-red-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Document PiP
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300 border-purple-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Zero-Knowledge Sync
+        </span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none">
+        Note It Down 📝
+      </h1>
+      <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
+        A note-taking Chrome Extension leveraging the modern Document Picture-in-Picture (PiP) API to create floating, borderless, always-on-top text editors.
+      </p>
+    </header>
+
+    <!-- Context & High Level Problem -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      <div class="md:col-span-2 flex flex-col gap-6">
+        <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Backstory</h2>
+        <blockquote class="border-l-4 border-current pl-4 italic text-zinc-600 dark:text-zinc-400 text-xs leading-relaxed flex flex-col gap-2">
+          <p>
+            "I know, the world didn't need another notepad. We have 4 billion of them, half VC-funded, all asking 'Sign up to continue' before you've typed your grocery list.
+          </p>
+          <p>
+            I just wanted notes to sync between my work laptop and personal laptop without using my personal account at work, my work account at home, or making Yet Another Account on Yet Another SaaS tool that'll eventually pivot to 'AI-powered productivity' and start emailing me.
+          </p>
+          <p>
+            So I built Note It Down. It's a notepad. Not reinventing anything, it just syncs without logging in, which felt rare enough to post about."
+          </p>
+        </blockquote>
+      </div>
+
+      <div class="brutal-border bg-zinc-50 dark:bg-zinc-900 p-6 border-current flex flex-col gap-4">
+        <h3 class="font-black text-xs uppercase border-b border-dashed border-current pb-2">Specs & Info</h3>
+        <ul class="flex flex-col gap-3 text-[10px]">
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Environment:</span>
+            <span class="font-bold">Chrome Sandbox (Sidebar)</span>
+          </li>
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">PiP Library:</span>
+            <span class="font-bold">@pip-it-up/react</span>
+          </li>
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Security Layer:</span>
+            <span class="font-bold">AES-GCM-256 E2EE</span>
+          </li>
+          <li class="flex justify-between pb-1">
+            <span class="text-zinc-400">Relay DB:</span>
+            <span class="font-bold">Cloudflare Workers + KV</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Key Features -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Core Implementation</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Floating PiP Editor -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Layers className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Floating PiP Window</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Pops out any active note into a native, always-on-top Document Picture-in-Picture canvas. This strips away default browser margins, headers, and footers, creating a clean full-bleed editor pane to prevent alt-tabbing.
+          </p>
+        </div>
+
+        <!-- Shadow DOM Sidebar -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <ShieldCheck className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Shadow DOM Isolation</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            The sidebar launcher script mounts the React editor container within an isolated Shadow DOM context on host pages (like Reddit or GitHub), completely preventing host CSS sheets from breaking styles or leaking resets.
+          </p>
+        </div>
+
+        <!-- Zero-Knowledge Sync -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Key className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Zero-Knowledge Storage</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            A secure system using derived AES-GCM-256 keys. Notes are encrypted client-side using WebCrypto APIs before sync transmission. The worker server only receives encrypted blobs, keeping credentials private.
+          </p>
+        </div>
+
+        <!-- Cloudflare workers -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Cloud className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Cloudflare Edge KV Relay</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Notes sync directly to your self-hosted Cloudflare Worker. Cloudflare's free tier provides 1GB storage and 100,000 requests/day, making cross-device relays fast, private, and free to host.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Powered by pip-it-up Section with Code Block -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">🧩 Powered by pip-it-up</h2>
+      <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+        This extension was designed to demonstrate how effortlessly you can wrap any React component in a native PiP frame using the `@pip-it-up/react` library.
+      </p>
+      <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+        Here is the exact controlled integration from the `EditorOverlay.tsx` file inside our codebase:
+      </p>
+
+      <div class="brutal-border border-current p-4 bg-[#0E0E10] text-zinc-100 text-[10px] leading-relaxed overflow-x-auto brutal-shadow-sm">
+        <pre><code class="language-tsx">{`import { PipWrapper } from '@pip-it-up/react'
+
+// ...inside the component...
+
+<PipWrapper
+  width={380}
+  height={360}
+  open={activeNoteId !== null}
+  onOpenChange={(openState) => {
+    if (!openState) {
+      setActiveNoteId(null)
+    }
+  }}
+  placeholder={<div style={{ display: 'none' }} />}
+>
+  {activeNoteId && (
+    <NoteEditor
+      key={activeNoteId}
+      noteId={activeNoteId}
+      onClose={() => setActiveNoteId(null)}
+      theme={theme}
+    />
+  )}
+</PipWrapper>`}</code></pre>
+      </div>
+    </section>
+
+    <!-- Zero Knowledge Cryptography -->
+    <section id="zero-knowledge-cryptography" class="brutal-border border-current p-6 brutal-shadow bg-white dark:bg-zinc-950 flex flex-col gap-6">
+      <div class="border-b border-dashed border-current pb-2">
+        <h2 class="text-lg font-black uppercase text-[#2563EB]">Zero-Knowledge Cryptography</h2>
+        <p class="text-[10px] text-zinc-400">Server-blind database read/write validation using WebCrypto</p>
+      </div>
+
+      <div class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300 flex flex-col gap-4">
+        <p>
+          To achieve complete privacy, the extension employs a zero-knowledge structure using WebCrypto APIs:
+        </p>
+        <ol class="list-decimal pl-5 flex flex-col gap-2">
+          <li>
+            <strong>Deterministic Key Derivation (HKDF)</strong>: From a single sync token, the extension derives three independent cryptographic values via HKDF-SHA-256 (using a fixed 32-byte zero salt):
+            <ul class="list-disc pl-5 mt-1 text-[11px] text-zinc-500">
+              <li>`address`: The database lookup key (used as the URL segment on the worker).</li>
+              <li>`encryptionKey`: An AES-GCM 256-bit key used locally to encrypt/decrypt note database payloads.</li>
+              <li>`verifyKey`: Stored on the worker during the first sync to authenticate future writes.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Write Token Derivation (HMAC)</strong>: A `writeToken` is derived by computing an HMAC-SHA256 signature of `"nid-write-auth"` using the derived `verifyKey` bytes as the key.
+          </li>
+          <li>
+            <strong>Zero-Knowledge Boundary</strong>: The client only transmits the `address`, the `writeToken`, and the encrypted `blob`. The `encryptionKey` and the raw `token` **never leave your device**.
+          </li>
+          <li>
+            <strong>Worker Verification</strong>: The worker verifies subsequent writes by re-computing the HMAC signature using the stored `verifyKey` and comparing it to the incoming `writeToken`. The worker is content-blind (cannot read notes) and token-blind (does not know the raw token).
+          </li>
+        </ol>
+
+        <!-- Sequence Diagram Container -->
+        <div class="border border-dashed border-current p-4 bg-zinc-50 dark:bg-zinc-900 rounded overflow-x-auto">
+          <div class="mermaid justify-center flex">
+{`sequenceDiagram
+    autonumber
+    participant UI as Extension UI
+    participant Sync as sync.ts (Orchestrator)
+    participant Crypto as crypto.ts (WebCrypto)
+    participant Storage as storage.ts (Chrome Local)
+    participant Merge as merge.ts (Resolution)
+    participant Worker as Cloudflare Worker & KV
+
+    UI->>Sync: User clicks 'Save & Sync'
+    
+    activate Sync
+    Sync->>Crypto: Derive address, encryptionKey, verifyKey, & writeToken
+    Crypto-->>Sync: Keys returned (derived via HKDF & HMAC-SHA256)
+    
+    Sync->>Worker: GET /v1/:address (Retrieve remote database)
+    alt Remote data exists
+        Worker-->>Sync: 200 OK with { blob, blobHash }
+        Sync->>Crypto: Decrypt remote blob using encryptionKey
+        Crypto-->>Sync: Decrypted remote notes (JSON)
+    else First-time sync (no remote data)
+        Worker-->>Sync: 404 Not Found
+        Sync->>Sync: Set isFirstWrite = true
+    end
+
+    Sync->>Storage: Retrieve current local notes
+    Storage-->>Sync: Return local notes array
+
+    Sync->>Merge: mergeNotes(local, remote)
+    Note over Merge: Deterministically merges notes by version/updatedAt (creates conflict copies on divergence).
+    Merge-->>Sync: Merged notes array returned
+
+    Sync->>Storage: Save merged notes back to browser storage
+    
+    Sync->>Crypto: Encrypt merged notes using encryptionKey (AES-GCM-256)
+    Crypto-->>Sync: Return new Encrypted Blob
+
+    Sync->>Worker: PUT /v1/:address { blob, writeToken, verifyKey?, previousHash }
+    Note over Worker: Worker validates writeToken against verifyKey and performs a Compare-and-Swap (CAS) check.
+    
+    alt 409 Conflict (Remote was updated during sync)
+        Worker-->>Sync: 409 Conflict
+        Note over Sync: Sync conflict detected! Start retry loop (Max 2 attempts)
+        Sync->>Worker: GET /v1/:address (Fetch fresh remote)
+        Worker-->>Sync: 200 OK with new { blob, blobHash }
+        Sync->>Crypto: Decrypt new remote blob
+        Sync->>Merge: Re-merge local database with new remote database
+        Sync->>Storage: Save re-merged notes
+        Sync->>Crypto: Encrypt new merged database
+        Sync->>Worker: PUT /v1/:address { new blob, writeToken, previousHash: newHash }
+    end
+    
+    Worker-->>Sync: 200 OK (Write Successful)
+    deactivate Sync
+    
+    Sync-->>UI: Return SyncResult (success/syncedAt)`}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Challenges & Solutions Table -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Technical Challenges & Solutions</h2>
+      
+      <div class="overflow-x-auto brutal-border border-current font-mono text-[10px]">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-zinc-100 dark:bg-zinc-900 border-b-2 border-current">
+              <th class="p-3 border-r border-current uppercase font-black w-1/4">Challenge</th>
+              <th class="p-3 border-r border-current uppercase font-black w-1/4">Browser Policy</th>
+              <th class="p-3 border-r border-current uppercase font-black w-1/4">Problem</th>
+              <th class="p-3 uppercase font-black w-1/4">Solution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-current">
+              <td class="p-3 border-r border-current font-bold">1. Sandboxed Extension Frame</td>
+              <td class="p-3 border-r border-current text-zinc-500">Extensions block documentPictureInPicture in popup/sidebar frames.</td>
+              <td class="p-3 border-r border-current text-zinc-500">requestWindow() throws security exceptions in default extension overlays.</td>
+              <td class="p-3 text-zinc-600 dark:text-zinc-300">Migrated UI mount targets to a webpage-injected sidebar drawer element.</td>
+            </tr>
+            <tr class="border-b border-current">
+              <td class="p-3 border-r border-current font-bold">2. Gesture Token Expiration</td>
+              <td class="p-3 border-r border-current text-zinc-500">Document PiP requires active user click tokens.</td>
+              <td class="p-3 border-r border-current text-zinc-500">Async messages (popup to script) expire user click context.</td>
+              <td class="p-3 text-zinc-600 dark:text-zinc-300">Mounted UI directly in host page DOM so clicks act as native events.</td>
+            </tr>
+            <tr class="border-b border-current">
+              <td class="p-3 border-r border-current font-bold">3. Content Security Policy (CSP)</td>
+              <td class="p-3 border-r border-current text-zinc-500">Strict host pages block lazy scripts.</td>
+              <td class="p-3 border-r border-current text-zinc-500">Lazy load chunk scripts trigger CSP exceptions on GitHub/Google.</td>
+              <td class="p-3 text-zinc-600 dark:text-zinc-300">Configured Vite packaging configurations to bundle build into a single IIFE script.</td>
+            </tr>
+            <tr class="border-b border-current">
+              <td class="p-3 border-r border-current font-bold">4. CSS Isolation</td>
+              <td class="p-3 border-r border-current text-zinc-500">Injected scripts are isolated from style namespaces.</td>
+              <td class="p-3 border-r border-current text-zinc-500">Copying document.styleSheets into PiP results in blank components.</td>
+              <td class="p-3 text-zinc-600 dark:text-zinc-300">Injected the absolute CSS link of the extension to PiP head on instantiation.</td>
+            </tr>
+            <tr>
+              <td class="p-3 border-r border-current font-bold">5. Host Style Bleeding</td>
+              <td class="p-3 border-r border-current text-zinc-500">Host global resets leak onto injected elements.</td>
+              <td class="p-3 border-r border-current text-zinc-500">Sites like Reddit overwrite margins/font alignments in our sidebar launcher.</td>
+              <td class="p-3 text-zinc-600 dark:text-zinc-300">Encapsulated React app mounting container root inside an isolated Shadow DOM.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Source Link -->
+    <section class="flex flex-wrap gap-4 border-t-3 border-current pt-8 mb-8">
+      <a 
+        href="https://github.com/Shakya47/note-it-down" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="brutal-border brutal-shadow-sm brutal-btn-hover bg-[#2563EB] text-white px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+        aria-label="View note-it-down source code on GitHub"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+        </svg>
+        Explore GitHub Source
+      </a>
+    </section>
+
+    <!-- Other Selected Work navigation links -->
+    <section class="flex flex-col gap-4 border-t-3 border-current pt-8 mb-8" aria-label="Other case studies navigation">
+      <h3 class="font-black text-xs uppercase">Other Selected Work Case Studies</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <a 
+          href="/work/lender-price" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Lender Price</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/phox-health" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Phox Health</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/culturenow" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>CultureNow</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/pip-it-up" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>pip-it-up Library</span>
+          <span>&gt;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<!-- Load Mermaid dynamically for sequence diagram rendering -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script is:inline>
+  if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({ 
+      startOnLoad: true, 
+      theme: 'neutral',
+      securityLevel: 'loose'
+    });
+  }
+</script>

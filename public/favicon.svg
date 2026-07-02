@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+    <!-- Brutalist "SS" Monogram (Vector Paths) -->
+    <path 
+      d="M44 32 H16 V64 H44 V96 H16 M96 32 H68 V64 H96 V96 H68" 
+      stroke="currentColor" 
+      stroke-width="12" 
+      stroke-linejoin="miter" 
+      stroke-linecap="square" 
+    />
+    <!-- Blue dot accent -->
+    <circle cx="112" cy="96" r="8" fill="#2563EB" />
+    <style>
+        svg { color: #000000; }
+        @media (prefers-color-scheme: dark) {
+            svg { color: #ffffff; }
+        }
+    </style>
+</svg>

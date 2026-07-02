@@ -1,0 +1,341 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ThemeToggle from '../../components/ThemeToggle.tsx';
+import { getPortfolio } from '../../data/portfolio';
+import { ArrowLeft, Key, ShieldCheck, Lock, Cpu, Server } from 'lucide-react';
+
+const portfolio = getPortfolio('en');
+---
+
+<Layout 
+  title="Designing a Server-Blind Sync Layer using WebCrypto APIs" 
+  description="Technical deep dive on building a zero-knowledge sync layer using browser WebCrypto APIs (HKDF-SHA256, HMAC, and AES-GCM-256) on Cloudflare Workers."
+>
+  <!-- Nav -->
+  <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
+    <a href="/" class="brutal-border-sm brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-3 py-1.5 font-mono text-xs font-black uppercase border-current flex items-center gap-1.5" aria-label="Back to landing page">
+      <ArrowLeft className="w-3.5 h-3.5 stroke-[2.5]" />
+      <span>BACK TO HOME</span>
+    </a>
+    <div class="flex items-center gap-3">
+      <ThemeToggle client:load />
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 md:py-16 flex flex-col gap-12 font-mono">
+    <!-- Header -->
+    <header class="flex flex-col gap-4 border-b-3 border-current pb-8">
+      <div class="flex flex-wrap gap-2">
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300 border-purple-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Security & A11y
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-400 text-[10px] font-extrabold uppercase tracking-wide">
+          WebCrypto API
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border-emerald-400 text-[10px] font-extrabold uppercase tracking-wide">
+          Cloudflare Workers
+        </span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none">
+        Server-Blind Sync Layer
+      </h1>
+      <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
+        Building a zero-knowledge, end-to-end encrypted note sync relay using client-side key derivations and serverless database storage.
+      </p>
+    </header>
+
+    <!-- Context & Architecture Overview -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Architectural Problem</h2>
+      <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+        When sync layers are designed, developers typically store credentials (passwords, auth sessions) and decryptable data directly in a centralized database. This exposes user notes to breaches and data snooping.
+      </p>
+      <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+        To address this on <strong>Note It Down</strong>, we built a <strong>zero-knowledge boundary</strong>: a serverless relay where your sync token and encryption keys never leave the browser. The database (Cloudflare KV) only stores encrypted bytes, and the edge worker verifies write requests without knowing the underlying raw credentials.
+      </p>
+    </section>
+
+    <!-- Sequence Diagram -->
+    <section class="brutal-border border-current p-6 brutal-shadow bg-white dark:bg-zinc-950 flex flex-col gap-6">
+      <div class="border-b border-dashed border-current pb-2">
+        <h2 class="text-lg font-black uppercase text-[#2563EB]">Sync Sequence Flow</h2>
+        <p class="text-[10px] text-zinc-400">Step-by-step key derivation, decryption, merging, and compare-and-swap write validation</p>
+      </div>
+
+      <div class="mermaid justify-center flex overflow-x-auto p-4 bg-zinc-50 dark:bg-zinc-900 border border-dashed border-current">
+{`sequenceDiagram
+    autonumber
+    participant UI as Extension UI
+    participant Sync as sync.ts (Orchestrator)
+    participant Crypto as crypto.ts (WebCrypto)
+    participant Storage as storage.ts (Chrome Local)
+    participant Merge as merge.ts (Resolution)
+    participant Worker as Cloudflare Worker & KV
+
+    UI->>Sync: User clicks 'Save & Sync'
+    
+    activate Sync
+    Sync->>Crypto: Derive address, encryptionKey, verifyKey, & writeToken
+    Crypto-->>Sync: Keys returned (derived via HKDF & HMAC-SHA256)
+    
+    Sync->>Worker: GET /v1/:address (Retrieve remote database)
+    alt Remote data exists
+        Worker-->>Sync: 200 OK with { blob, blobHash }
+        Sync->>Crypto: Decrypt remote blob using encryptionKey
+        Crypto-->>Sync: Decrypted remote notes (JSON)
+    else First-time sync (no remote data)
+        Worker-->>Sync: 404 Not Found
+        Sync->>Sync: Set isFirstWrite = true
+    end
+
+    Sync->>Storage: Retrieve current local notes
+    Storage-->>Sync: Return local notes array
+
+    Sync->>Merge: mergeNotes(local, remote)
+    Note over Merge: Deterministically merges notes by version/updatedAt (creates conflict copies on divergence).
+    Merge-->>Sync: Merged notes array returned
+
+    Sync->>Storage: Save merged notes back to browser storage
+    
+    Sync->>Crypto: Encrypt merged notes using encryptionKey (AES-GCM-256)
+    Crypto-->>Sync: Return new Encrypted Blob
+
+    Sync->>Worker: PUT /v1/:address { blob, writeToken, verifyKey?, previousHash }
+    Note over Worker: Worker validates writeToken against verifyKey and performs a Compare-and-Swap (CAS) check.
+    
+    alt 409 Conflict (Remote was updated during sync)
+        Worker-->>Sync: 409 Conflict
+        Note over Sync: Sync conflict detected! Start retry loop (Max 2 attempts)
+        Sync->>Worker: GET /v1/:address (Fetch fresh remote)
+        Worker-->>Sync: 200 OK with new { blob, blobHash }
+        Sync->>Crypto: Decrypt new remote blob
+        Sync->>Merge: Re-merge local database with new remote database
+        Sync->>Storage: Save re-merged notes
+        Sync->>Crypto: Encrypt new merged database
+        Sync->>Worker: PUT /v1/:address { new blob, writeToken, previousHash: newHash }
+    end
+    
+    Worker-->>Sync: 200 OK (Write Successful)
+    deactivate Sync
+    
+    Sync-->>UI: Return SyncResult (success/syncedAt)`}
+      </div>
+    </section>
+
+    <!-- Cryptographic Key Derivation Details -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">1. Key Derivation Pipeline (HKDF)</h2>
+      <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+        To prevent key reuse (using the same key for authentication and encryption), we run your raw sync token through **HKDF-SHA-256** (HMAC-based Extract-and-Expand Key Derivation Function). This derives three separate keys with distinct domain tags:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-2">
+          <span class="font-black text-[#2563EB] text-[10px] uppercase">1. Lookup Address</span>
+          <p class="text-[10px] text-zinc-500">
+            Derived using the tag `"nid-db-address"`. Since HKDF is deterministic, the same sync token always generates the same 32-byte address, acting as the database lookup row identifier.
+          </p>
+        </div>
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-2">
+          <span class="font-black text-[#2563EB] text-[10px] uppercase">2. Encryption Key</span>
+          <p class="text-[10px] text-zinc-500">
+            Derived using `"nid-encryption-key"`. Creates a unique 256-bit AES key used on-device to encrypt note arrays using the AES-GCM authenticated cipher.
+          </p>
+        </div>
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-2">
+          <span class="font-black text-[#2563EB] text-[10px] uppercase">3. Verification Key</span>
+          <p class="text-[10px] text-zinc-500">
+            Derived using `"nid-verification-key"`. Transmitted to the Cloudflare Worker *only on the first database write* to authenticate future write attempts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Client-Side Implementation Code -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">2. Client-Side WebCrypto Implementation</h2>
+      <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+        Below is the TypeScript code running in the Chrome Extension background context to derive these cryptographic components using the native WebCrypto API:
+      </p>
+
+      <div class="brutal-border border-current p-4 bg-[#0E0E10] text-zinc-100 text-[10px] leading-relaxed overflow-x-auto brutal-shadow-sm">
+        <pre><code class="language-typescript">{`async function deriveSyncKeys(rawToken: string) {
+  const encoder = new TextEncoder();
+  const tokenBytes = encoder.encode(rawToken);
+
+  // Import raw token bytes into an HKDF-capable CryptoKey object
+  const baseKey = await crypto.subtle.importKey(
+    "raw",
+    tokenBytes,
+    { name: "HKDF" },
+    false,
+    ["deriveBits", "deriveKey"]
+  );
+
+  // 1. Derive lookup address (32 bytes)
+  const addressBuffer = await crypto.subtle.deriveBits(
+    {
+      name: "HKDF",
+      hash: "SHA-256",
+      salt: new Uint8Array(32), // 32-byte zero salt
+      info: encoder.encode("nid-db-address")
+    },
+    baseKey,
+    256 // 32 bytes * 8 bits
+  );
+  const address = arrayBufferToHex(addressBuffer);
+
+  // 2. Derive AES-GCM Encryption Key
+  const encryptionKey = await crypto.subtle.deriveKey(
+    {
+      name: "HKDF",
+      hash: "SHA-256",
+      salt: new Uint8Array(32),
+      info: encoder.encode("nid-encryption-key")
+    },
+    baseKey,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
+
+  // 3. Derive Verification Key (used for HMAC write token generation)
+  const verifyKey = await crypto.subtle.deriveKey(
+    {
+      name: "HKDF",
+      hash: "SHA-256",
+      salt: new Uint8Array(32),
+      info: encoder.encode("nid-verification-key")
+    },
+    baseKey,
+    { name: "HMAC", hash: "SHA-256", length: 256 },
+    false,
+    ["sign"]
+  );
+
+  // 4. Compute Write Signature Auth Token (HMAC signature of static tag)
+  const signatureBuffer = await crypto.subtle.sign(
+    "HMAC",
+    verifyKey,
+    encoder.encode("nid-write-auth")
+  );
+  const writeToken = arrayBufferToHex(signatureBuffer);
+
+  return { address, encryptionKey, writeToken };
+}`}</code></pre>
+      </div>
+    </section>
+
+    <!-- Server-Side verification (Cloudflare Worker) -->
+    <section class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">3. Server-Blind Worker Verification</h2>
+      <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+        The Cloudflare Worker accepts a `PUT /v1/:address` request containing the encrypted `blob` and the client's `writeToken`. The worker operates blindly:
+      </p>
+
+      <div class="brutal-border border-current p-4 bg-[#0E0E10] text-zinc-100 text-[10px] leading-relaxed overflow-x-auto brutal-shadow-sm">
+        <pre><code class="language-typescript">{`// Inside Cloudflare Worker routing controller...
+export async function handlePutRequest(request: Request, env: Env) {
+  const { address } = request.params;
+  const { blob, writeToken, verifyKeyHex, previousHash } = await request.json();
+
+  const record = await env.NOTES_KV.get(address, { type: "json" });
+
+  if (!record) {
+    // First-time write: store the verifyKey and the encrypted blob
+    await env.NOTES_KV.put(address, JSON.stringify({
+      blob,
+      verifyKey: verifyKeyHex,
+      hash: await sha256(blob)
+    }));
+    return new Response("Created", { status: 201 });
+  }
+
+  // Subsequent writes: Import verifyKey and verify client's writeToken
+  const verifyKey = await importHmacKey(record.verifyKey);
+  const isValid = await verifyHmacSignature(verifyKey, writeToken, "nid-write-auth");
+
+  if (!isValid) {
+    return new Response("Unauthorized Signature", { status: 401 });
+  }
+
+  // Compare-and-Swap (CAS) check to prevent overwrite race conditions
+  if (record.hash !== previousHash) {
+    return new Response("Conflict: database updated elsewhere", { status: 409 });
+  }
+
+  // Update blob and update current hash
+  await env.NOTES_KV.put(address, JSON.stringify({
+    blob,
+    verifyKey: record.verifyKey,
+    hash: await sha256(blob)
+  }));
+  return new Response("OK", { status: 200 });
+}`}</code></pre>
+      </div>
+    </section>
+
+    <!-- Key takeaways -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start border-t border-dashed border-current pt-8">
+      <div class="flex flex-col gap-4">
+        <h3 class="font-black text-xs uppercase text-[#2563EB]">Platform Benefits</h3>
+        <p class="text-[11px] leading-relaxed text-zinc-500">
+          By offloading all cryptographic processes to the client and deploying an authentication-blind KV worker, users secure full ownership of their data. Even in the event of a database breach on Cloudflare, the attacker only acquires encrypted blobs and verification signatures, which cannot be decrypted without the local device key.
+        </p>
+      </div>
+      <div class="flex flex-col gap-4">
+        <h3 class="font-black text-xs uppercase text-[#2563EB]">Scalability</h3>
+        <p class="text-[11px] leading-relaxed text-zinc-500">
+          The edge worker architecture operates without state, VMs, or persistent databases. With Cloudflare KV edge caching, read requests resolve globally near-instantly, scaling note synchronization at zero cost within Cloudflare's generous free tier limitations.
+        </p>
+      </div>
+    </section>
+
+    <!-- Other Selected Work navigation links -->
+    <section class="flex flex-col gap-4 border-t-3 border-current pt-8 mb-8" aria-label="Other case studies navigation">
+      <h3 class="font-black text-xs uppercase">Other Selected Work Case Studies</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <a 
+          href="/work/lender-price" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Lender Price</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/phox-health" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Phox Health</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/culturenow" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>CultureNow</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/note-it-down" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>note-it-down Editor</span>
+          <span>&gt;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<!-- Load Mermaid dynamically for sequence diagram rendering -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script is:inline>
+  if (typeof mermaid !== 'undefined') {
+    mermaid.initialize({ 
+      startOnLoad: true, 
+      theme: 'neutral',
+      securityLevel: 'loose'
+    });
+  }
+</script>

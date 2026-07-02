@@ -1,0 +1,428 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ThemeToggle from '../components/ThemeToggle.tsx';
+import ContributionsFilter from '../components/ContributionsFilter.tsx';
+import PipLiveDemo from '../components/PipLiveDemo.tsx';
+import { getPortfolio } from '../data/portfolio';
+import { ChevronRight, ExternalLink } from 'lucide-react';
+
+const { locale = 'en' } = Astro.props;
+const portfolio = getPortfolio(locale);
+const { profile, skills, projects, experience, contributions, contact } = portfolio;
+
+// Utility to parse markdown bold elements (**text**) into safe HTML <strong> elements
+const formatBold = (text: string) => {
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong class="font-extrabold text-[#2563EB] dark:text-blue-400">$1</strong>');
+};
+---
+
+<Layout title={`${profile.name} | ${profile.title}`} description={profile.pitch}>
+  <!-- Global Sticky Nav -->
+  <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4" aria-label="Main Navigation">
+    <a href="#" class="font-mono font-black text-xl tracking-tighter hover:text-[#2563EB] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label={`${profile.name} home`}>
+      SAURABH_SHAKYA<span class="text-[#2563EB]">.</span>
+    </a>
+    <div class="flex flex-wrap items-center justify-center gap-6 font-mono text-xs uppercase font-black tracking-wider text-zinc-500 dark:text-zinc-400">
+      <a href="#work" class="hover:text-light-border dark:hover:text-dark-border transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="View selected work">Work</a>
+      <a href="#skills" class="hover:text-light-border dark:hover:text-dark-border transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="View core skills">Skills</a>
+      <a href="#contributions" class="hover:text-light-border dark:hover:text-dark-border transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="View contributions list">Contributions</a>
+      <a href="#experience" class="hover:text-light-border dark:hover:text-dark-border transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="View professional experience">Experience</a>
+      <a href="#contact" class="hover:text-light-border dark:hover:text-dark-border transition-colors text-[#2563EB] dark:text-[#2563EB] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="Navigate to contact form">Get in Touch</a>
+    </div>
+    <div class="flex items-center gap-3">
+      {profile.ctas.filter(cta => cta.download).map(cta => (
+        <a 
+          href={cta.url} 
+          target="_blank"
+          rel="noopener noreferrer"
+          class="brutal-border-sm brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-3 py-2 font-mono text-xs font-black uppercase border-current focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+          aria-label={`View ${cta.label}`}
+        >
+          {cta.label}
+        </a>
+      ))}
+      <ThemeToggle client:load />
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-16 flex flex-col gap-16 md:gap-24">
+    <!-- Hero Section -->
+    <section id="hero" aria-labelledby="hero-title">
+      <!-- Main Pitch Box -->
+      <div class="w-full brutal-border bg-white dark:bg-[#0E0E10] p-6 md:p-10 brutal-shadow border-current grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-[400px] lg:min-h-[480px]">
+        <!-- Left Side content: Text details -->
+        <div class="lg:col-span-8 flex flex-col gap-6">
+          <div class="flex flex-wrap gap-3 items-center">
+            <span class="font-mono text-xs font-black bg-[#2563EB] text-white px-3 py-1 brutal-border-sm border-current uppercase">
+              {profile.title}
+            </span>
+            <span class="font-mono text-xs font-black bg-zinc-50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 px-3 py-1 brutal-border-sm border-current uppercase">
+              📍 {profile.location}
+            </span>
+          </div>
+          <h1 id="hero-title" class="text-5xl md:text-7xl font-black tracking-tighter leading-none uppercase">
+            {profile.experienceYears}+ YEARS<br />
+            <span class="text-[#2563EB]">EXPERIENCE.</span>
+          </h1>
+          <p class="text-base md:text-lg font-bold leading-relaxed text-zinc-600 dark:text-zinc-300 max-w-xl">
+            {profile.pitch}
+          </p>
+        </div>
+
+        <!-- Right Side content: Action Buttons & Relocation status -->
+        <div class="lg:col-span-4 flex flex-col gap-4 w-full justify-center">
+          {profile.ctas.map(cta => (
+            <a 
+              href={cta.url} 
+              target={cta.download ? "_blank" : undefined}
+              rel={cta.download ? "noopener noreferrer" : undefined}
+              class={`w-full text-center brutal-border brutal-shadow brutal-btn-hover py-4 font-mono text-sm font-black uppercase tracking-wider border-current block focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent ${
+                cta.type === 'primary' 
+                  ? 'bg-[#2563EB] text-white' 
+                  : 'bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border'
+              }`}
+            >
+              {cta.label}
+            </a>
+          ))}
+          
+          <div class="flex items-center justify-center gap-2 brutal-border bg-zinc-50 dark:bg-zinc-900 py-3.5 font-mono text-[10px] font-black uppercase border-current">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <span class="ml-1 text-zinc-600 dark:text-zinc-300">{profile.relocationStatus}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Grid Section -->
+    <section id="skills" class="flex flex-col gap-8" aria-labelledby="skills-heading">
+      <div class="border-b-3 border-current pb-4">
+        <h2 id="skills-heading" class="text-4xl md:text-5xl font-black tracking-tight uppercase flex items-center gap-3">
+          <span class="text-[#2563EB]">01 /</span> Powering the Web With
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {skills.map((skill, index) => {
+          const Icon = skill.icon;
+          return (
+            <div 
+              class="brutal-border bg-white dark:bg-[#0E0E10] border-current p-4 brutal-shadow-sm hover:brutal-shadow brutal-btn-hover group flex flex-col gap-3 justify-between transition-all duration-100"
+              style={`animation-delay: ${index * 50}ms`}
+            >
+              <div class="flex justify-between items-start">
+                <div class="p-2 bg-[#2563EB]/10 dark:bg-[#2563EB]/20 text-[#2563EB] brutal-border-sm border-current rounded-none">
+                  <Icon className="w-5 h-5 stroke-[2.5]" aria-hidden="true" />
+                </div>
+                <span class="font-mono text-[10px] font-black text-zinc-400">0{index + 1}</span>
+              </div>
+              <div>
+                <h3 class="font-mono text-xs font-black uppercase tracking-wider mb-1">{skill.name}</h3>
+                <p class="text-[10px] font-mono text-zinc-500 leading-tight">{skill.desc}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </section>
+
+    <!-- Featured Project (pip-it-up) -->
+    <section id="work" class="flex flex-col gap-8" aria-labelledby="featured-library-heading">
+      <div class="border-b-3 border-current pb-4">
+        <h2 id="featured-library-heading" class="text-4xl md:text-5xl font-black tracking-tight uppercase flex items-center gap-3">
+          <span class="text-[#2563EB]">02 /</span> Featured Library
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div class="lg:col-span-7 brutal-border bg-white dark:bg-[#0E0E10] border-current p-6 md:p-8 brutal-shadow flex flex-col justify-between gap-6">
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-wrap gap-2">
+              <span class="brutal-border-sm px-2.5 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-400 text-[10px] font-extrabold uppercase tracking-wide">
+                OSS
+              </span>
+              <span class="brutal-border-sm px-2.5 py-0.5 bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 border-red-400 text-[10px] font-extrabold uppercase tracking-wide">
+                npm package
+              </span>
+            </div>
+            
+            <h3 class="text-3xl md:text-4xl font-black tracking-tight uppercase">
+              pip-it-up <span class="text-[#2563EB] font-mono text-lg font-bold">@pip-it-up/core</span>
+            </h3>
+            
+            <p class="text-sm font-semibold leading-relaxed text-zinc-600 dark:text-zinc-300">
+              Pop any UI component into a native floating, always-on-top Picture-in-Picture window. Built on Chrome's Document Picture-in-Picture API with state preservation, live style syncing, and automatic ResizeObserver sizing.
+            </p>
+
+            <div class="font-mono text-xs bg-zinc-50 dark:bg-zinc-950 p-4 brutal-border border-current flex flex-col gap-2">
+              <div class="flex justify-between items-center text-[10px] text-zinc-400 border-b border-zinc-300 dark:border-zinc-800 pb-1 mb-1">
+                <span>INSTALLATION</span>
+                <span>PNPM / NPM</span>
+              </div>
+              <code class="text-[#2563EB] font-black">pnpm add @pip-it-up/react @pip-it-up/core</code>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 w-full mt-4">
+            <a 
+              href="/work/pip-it-up" 
+              data-astro-prefetch
+              class="brutal-border brutal-shadow-sm brutal-btn-hover bg-[#2563EB] text-white px-4 py-2.5 font-mono text-xs font-black uppercase border-current flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+              aria-label="View pip-it-up library case study documentation"
+            >
+              <span>Deep Dive</span>
+              <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
+            </a>
+            <a 
+              href="https://pipitup.dev" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-4 py-2.5 font-mono text-xs font-black uppercase border-current flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+              aria-label="Visit pip-it-up live landing page"
+            >
+              <span>Landing Page</span>
+              <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
+            </a>
+            <a 
+              href="https://www.npmjs.com/package/@pip-it-up/core" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-4 py-2.5 font-mono text-xs font-black uppercase border-current flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+              aria-label="View @pip-it-up/core on npm registry"
+            >
+              <span>NPM Package</span>
+              <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
+            </a>
+            <a 
+              href="https://github.com/Shakya47/pip-it-up" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-4 py-2.5 font-mono text-xs font-black uppercase border-current flex items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+              aria-label="Explore pip-it-up source code on GitHub"
+            >
+              <span>GitHub</span>
+              <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 brutal-border bg-white dark:bg-[#0E0E10] border-current p-6 brutal-shadow flex flex-col justify-between gap-4">
+          <div class="border-b border-dashed border-current pb-2">
+            <h4 class="font-mono font-black text-xs uppercase text-[#2563EB]">Live Interactive Demo</h4>
+            <p class="text-[10px] font-mono text-zinc-500">Test reactive state synchronization and styles</p>
+          </div>
+          
+          <PipLiveDemo client:load />
+        </div>
+      </div>
+    </section>
+
+    <!-- Selected Projects Grid -->
+    <section class="flex flex-col gap-8" aria-labelledby="projects-heading">
+      <div class="border-b-3 border-current pb-4 flex justify-between items-end">
+        <h2 id="projects-heading" class="text-4xl md:text-5xl font-black tracking-tight uppercase flex items-center gap-3">
+          <span class="text-[#2563EB]">03 /</span> Selected Projects
+        </h2>
+        <span class="font-mono text-xs font-black uppercase tracking-wider text-[#2563EB] hidden sm:inline">
+          Engineered for performance →
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {projects.map(proj => (
+          <div class="brutal-border bg-white dark:bg-[#0E0E10] border-current brutal-shadow flex flex-col justify-between group overflow-hidden">
+            <!-- Simulated Image Cover -->
+            <div class={`h-48 w-full border-b-3 border-current ${proj.imageClass} flex items-center justify-center p-8 relative overflow-hidden`}>
+              <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+              <span class="font-mono text-xl font-black text-white/40 tracking-widest uppercase select-none group-hover:scale-105 transition-transform duration-200">
+                {proj.title}
+              </span>
+            </div>
+
+            <div class="p-6 flex flex-col justify-between flex-1 gap-6">
+              <div class="flex flex-col gap-3">
+                <div class="flex flex-wrap gap-2">
+                  {proj.tags.map(t => (
+                    <span class="brutal-border-sm px-2 py-0.5 text-[9px] font-mono font-black uppercase border-current bg-zinc-50 dark:bg-zinc-900">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                
+                <h3 class="text-2xl font-black tracking-tight uppercase leading-none">{proj.title}</h3>
+                <p class="text-xs font-mono text-zinc-500 dark:text-zinc-400 leading-relaxed">{proj.desc}</p>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                {proj.ctas.map(cta => (
+                  <a 
+                    href={cta.url}
+                    target={cta.url.startsWith('http') ? '_blank' : undefined}
+                    rel={cta.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    data-astro-prefetch={cta.url.startsWith('/') ? '' : undefined}
+                    class={`brutal-border-sm brutal-shadow-sm brutal-btn-hover px-4 py-2 font-mono text-xs font-black uppercase border-current inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent ${
+                      cta.type === 'primary' 
+                        ? 'bg-[#2563EB] text-white' 
+                        : 'bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border'
+                    }`}
+                    aria-label={`${cta.label} for ${proj.title}`}
+                  >
+                    <span>{cta.label}</span>
+                    <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Contributions Filter Section -->
+    <section id="contributions" class="flex flex-col gap-8" aria-labelledby="contributions-heading">
+      <div class="border-b-3 border-current pb-4">
+        <h2 id="contributions-heading" class="text-4xl md:text-5xl font-black tracking-tight uppercase flex items-center gap-3">
+          <span class="text-[#2563EB]">04 /</span> Contributions & Insights
+        </h2>
+      </div>
+
+      <ContributionsFilter contributions={contributions} client:load />
+    </section>
+
+    <!-- Experience Section (Career Roadmap) -->
+    <section id="experience" class="flex flex-col gap-8" aria-labelledby="experience-heading">
+      <div class="border-b-3 border-current pb-4">
+        <h2 id="experience-heading" class="text-4xl md:text-5xl font-black tracking-tight uppercase flex items-center gap-3">
+          <span class="text-[#2563EB]">05 /</span> Career Roadmap
+        </h2>
+      </div>
+
+      <!-- Roadmap Timeline Container -->
+      <div class="relative pl-6 md:pl-10 border-l-4 border-current py-4 flex flex-col gap-12 max-w-4xl">
+        {experience.map((exp, index) => (
+          <div class="relative group">
+            <!-- Connector Marker -->
+            <div class={`absolute -left-[37px] md:-left-[53px] top-1.5 w-7 h-7 md:w-10 md:h-10 brutal-border border-current flex items-center justify-center font-mono text-xs md:text-sm font-black uppercase ${
+              exp.current ? 'bg-[#2563EB] text-white' : 'bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border'
+            }`}>
+              0{index + 1}
+            </div>
+            
+            <div class="brutal-border bg-white dark:bg-[#0E0E10] border-current p-6 brutal-shadow">
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-current pb-3 mb-4 gap-2">
+                <div>
+                  {exp.current && (
+                    <span class="font-mono text-[9px] font-black bg-[#2563EB] text-white px-2 py-0.5 brutal-border-sm border-current uppercase">
+                      Current
+                    </span>
+                  )}
+                  <h3 class="text-xl md:text-2xl font-black uppercase tracking-tight mt-1">{exp.role}</h3>
+                  <span class="font-mono text-xs font-black uppercase text-zinc-500">{exp.company} • {exp.location}</span>
+                </div>
+                <span class="font-mono text-xs font-black uppercase brutal-border-sm bg-zinc-50 dark:bg-zinc-900 border-current px-3 py-1">
+                  {exp.period}
+                </span>
+              </div>
+
+              <ul class="flex flex-col gap-3 font-mono text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+                {exp.highlights.map(highlight => (
+                  <li class="flex items-start gap-2">
+                    <span class="text-[#2563EB] font-black" aria-hidden="true">▸</span>
+                    <span set:html={formatBold(highlight)}></span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Contact Section ("Let's Talk") -->
+    <section id="contact" class="flex flex-col gap-8 mb-8" aria-labelledby="contact-heading">
+      <div class="border-b-3 border-current pb-4">
+        <h2 id="contact-heading" class="text-4xl md:text-5xl font-black tracking-tight uppercase flex items-center gap-3">
+          <span class="text-[#2563EB]">06 /</span> Let's Talk_
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div class="lg:col-span-6 brutal-border bg-white dark:bg-[#0E0E10] border-current p-6 md:p-8 brutal-shadow flex flex-col justify-between gap-6">
+          <div class="flex flex-col gap-4">
+            <h3 class="text-3xl font-black uppercase tracking-tighter">{contact.headline}</h3>
+            <p class="text-sm font-semibold leading-relaxed text-zinc-600 dark:text-zinc-300">
+              {contact.desc}
+            </p>
+          </div>
+          
+          <div class="flex items-center gap-2 brutal-border-sm bg-zinc-50 dark:bg-zinc-900 px-3 py-2 font-mono text-xs font-black uppercase border-current self-start">
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse" aria-hidden="true"></span>
+            <span class="text-zinc-600 dark:text-zinc-300">{contact.responseRate}</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 flex flex-col gap-4 justify-between">
+          <!-- Centralized Dynamic CTAs mapping -->
+          {contact.ctas.map(cta => {
+            if (cta.type === 'primary') {
+              return (
+                <a 
+                  href={cta.url} 
+                  class="brutal-border brutal-shadow brutal-btn-hover bg-[#2563EB] text-white p-6 font-mono text-xl md:text-2xl font-black uppercase tracking-wider border-current flex justify-between items-center group focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+                >
+                  <span class="flex items-center gap-3">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 md:w-8 md:h-8" aria-hidden="true">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    {cta.label}
+                  </span>
+                  <span class="group-hover:translate-x-2 transition-transform" aria-hidden="true">&gt;</span>
+                </a>
+              )
+            }
+          })}
+
+          <div class="grid grid-cols-2 gap-4">
+            {contact.ctas.filter(cta => cta.type === 'secondary').map(cta => (
+              <a 
+                href={cta.url} 
+                target={cta.external ? "_blank" : undefined}
+                class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-5 font-mono text-sm font-black uppercase border-current flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+              >
+                {cta.label === 'LINKEDIN' ? (
+                  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                    <rect x="2" y="9" width="4" height="12"></rect>
+                    <circle cx="4" cy="4" r="2"></circle>
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                  </svg>
+                )}
+                {cta.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full bg-white dark:bg-[#0E0E10] border-t-3 border-current px-4 md:px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-6 text-zinc-500 font-mono text-[10px] font-black uppercase tracking-wider" role="contentinfo">
+    <div class="flex items-center gap-2">
+      <span>© 2026 SAURABH_SHAKYA PORTFOLIO</span>
+    </div>
+    <div class="flex flex-wrap justify-center gap-6">
+      <a href={`mailto:${contact.email}`} class="hover:text-light-border dark:hover:text-dark-border focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="Send direct email">Email</a>
+      <a href={contact.github} target="_blank" class="hover:text-light-border dark:hover:text-dark-border focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="Visit GitHub profile">GitHub</a>
+      <a href={contact.linkedin} target="_blank" class="hover:text-light-border dark:hover:text-dark-border focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="Visit LinkedIn profile">LinkedIn</a>
+      <a href="/Saurabh_Shakya_Resume.pdf" target="_blank" rel="noopener noreferrer" class="hover:text-light-border dark:hover:text-dark-border focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent" aria-label="View Resume">Resume</a>
+    </div>
+  </footer>
+</Layout>

@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+/* Configure class-based dark mode in Tailwind CSS v4 */
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-dark-bg: #0E0E10;
+  --color-dark-border: #FFFFFF;
+  --color-light-bg: #FFFFFF;
+  --color-light-border: #000000;
+  --color-accent: #2563EB;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: var(--font-display);
+    background-color: var(--color-light-bg);
+    color: var(--color-light-border);
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+  }
+  
+  html.dark body {
+    background-color: var(--color-dark-bg);
+    color: var(--color-dark-border);
+  }
+
+  /* Monospace typography defaults */
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Custom Brutalist Utility Classes */
+@layer utilities {
+  .brutal-border {
+    border: 3px solid currentColor;
+  }
+  
+  .brutal-border-sm {
+    border: 2px solid currentColor;
+  }
+
+  .brutal-border-lg {
+    border: 4px solid currentColor;
+  }
+
+  .brutal-shadow {
+    box-shadow: 4px 4px 0px 0px currentColor;
+  }
+
+  .brutal-shadow-sm {
+    box-shadow: 2px 2px 0px 0px currentColor;
+  }
+
+  .brutal-shadow-lg {
+    box-shadow: 8px 8px 0px 0px currentColor;
+  }
+  
+  .brutal-shadow-xl {
+    box-shadow: 12px 12px 0px 0px currentColor;
+  }
+
+  .brutal-btn-hover {
+    transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+  }
+
+  .brutal-btn-hover:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px currentColor;
+  }
+
+  .brutal-btn-hover:active:not(:disabled) {
+    transform: translate(0px, 0px);
+    box-shadow: 2px 2px 0px 0px currentColor;
+  }
+  
+  /* Custom outline-text style for headers */
+  .text-stroke {
+    -webkit-text-stroke: 1px currentColor;
+    color: transparent;
+  }
+  
+  .dark .text-stroke {
+    -webkit-text-stroke: 1px #FFFFFF;
+  }
+
+  /* Marquee animation */
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: marquee 20s linear infinite;
+  }
+
+  .animate-marquee-slow {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: marquee 40s linear infinite;
+  }
+}

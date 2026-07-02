@@ -1,0 +1,248 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ThemeToggle from '../../components/ThemeToggle.tsx';
+import PipLiveDemo from '../../components/PipLiveDemo.tsx';
+import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw } from 'lucide-react';
+---
+
+<Layout 
+  title="pip-it-up | Document Picture-in-Picture Toolkit" 
+  description="Deep dive into pip-it-up, a framework-agnostic core with React bindings to pop any interactive UI component into a native floating Picture-in-Picture window."
+>
+  <!-- Nav -->
+  <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center">
+    <a href="/" class="brutal-border-sm brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-3 py-1.5 font-mono text-xs font-black uppercase border-current flex items-center gap-1.5">
+      <ArrowLeft className="w-3.5 h-3.5 stroke-[2.5]" />
+      <span>BACK TO HOME</span>
+    </a>
+    <div class="flex items-center gap-3">
+      <ThemeToggle client:load />
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 md:py-16 flex flex-col gap-12 font-mono">
+    <!-- Header -->
+    <header class="flex flex-col gap-4 border-b-3 border-current pb-8">
+      <div class="flex flex-wrap gap-2">
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-400 text-[10px] font-extrabold uppercase tracking-wide">
+          OSS
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 border-red-400 text-[10px] font-extrabold uppercase tracking-wide">
+          NPM
+        </span>
+        <span class="brutal-border-sm px-2.5 py-0.5 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border-emerald-400 text-[10px] font-extrabold uppercase tracking-wide">
+          React Binding
+        </span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none">
+        pip-it-up
+      </h1>
+      <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
+        A toolkit designed to pop any interactive UI component from a web application into a native, floating, always-on-top Picture-in-Picture window.
+      </p>
+    </header>
+
+    <!-- Project Overview -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+      <div class="md:col-span-2 flex flex-col gap-6">
+        <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Origin & Problem</h2>
+        <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+          Standard browser Picture-in-Picture is restricted entirely to HTML5 `&lt;video&gt;` elements. For developers building rich, interactive dashboard panels, floating checklists, chat controllers, or video editors, keeping components visible while users multi-task was impossible.
+        </p>
+        <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+          In mid-2023, Chrome introduced the experimental <strong>Document Picture-in-Picture API</strong>, which allows opening a blank floating window that can be populated with arbitrary HTML content. However, the raw API is complex to manage, requiring manuals styles cloning, event listener bindings, and state preservation.
+        </p>
+        <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
+          <strong>pip-it-up</strong> (documented with live previews at <a href="https://pipitup.dev" target="_blank" rel="noopener noreferrer" class="text-[#2563EB] hover:underline font-bold">pipitup.dev</a>) was created to solve these exact hurdles. It provides a simple React wrapper that abstracts the low-level DOM detaches, style mirrors, and auto-sizing observers, enabling standard component trees to be popped out with zero extra configuration.
+        </p>
+      </div>
+
+      <div class="brutal-border bg-zinc-50 dark:bg-zinc-900 p-6 border-current flex flex-col gap-4">
+        <h3 class="font-black text-xs uppercase border-b border-dashed border-current pb-2">Specs & Info</h3>
+        <ul class="flex flex-col gap-3 text-[10px]">
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Published packages:</span>
+            <span class="font-bold">@pip-it-up/core, @pip-it-up/react</span>
+          </li>
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Total Downloads:</span>
+            <span class="font-bold">12K+ total downloads</span>
+          </li>
+          <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
+            <span class="text-zinc-400">Main Tech:</span>
+            <span class="font-bold">TypeScript, React, ResizeObserver</span>
+          </li>
+          <li class="flex justify-between pb-1">
+            <span class="text-zinc-400">License:</span>
+            <span class="font-bold">MIT</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Live Demo Island -->
+    <section class="brutal-border border-current p-6 brutal-shadow bg-white dark:bg-zinc-950 flex flex-col gap-4">
+      <div class="border-b border-dashed border-current pb-2">
+        <h2 class="text-lg font-black uppercase text-[#2563EB]">Live Interactive Demonstration</h2>
+        <p class="text-[10px] text-zinc-400">Modify lists, complete tasks, and float the panel</p>
+      </div>
+      <PipLiveDemo client:load />
+    </section>
+
+    <!-- Technical Architecture -->
+    <section id="technical-deep-dive" class="flex flex-col gap-6">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Technical Deep Dive</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- ResizeObserver -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Maximize2 className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Auto-Sizing via ResizeObserver</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            A native Document PiP window must be opened with hardcoded dimensions. To prevent truncated content or large empty gaps, `pip-it-up` runs a `ResizeObserver` on the target component, dynamically resizing the floating window in real time whenever internal element heights change.
+          </p>
+        </div>
+
+        <!-- Style Sync -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <RefreshCw className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Style Sync via MutationObserver</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Since the floating PiP window uses a separate browser document, standard stylesheet references are lost. `pip-it-up` automatically copies all `style` and `link` tags into the PiP window, and uses a `MutationObserver` on the parent document's head to copy styling updates (like Tailwind theme swaps) dynamically.
+          </p>
+        </div>
+
+        <!-- DOM Detach -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <Zap className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">State Preservation via DOM Detach</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            Traditional popup windows re-render from scratch, losing input cursor focus, undo stacks, and transient component state. `pip-it-up` dynamically moves the active DOM nodes into the PiP window frame rather than duplicating them, keeping state and references intact.
+          </p>
+        </div>
+
+        <!-- Graceful Fallbacks -->
+        <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
+          <div class="flex items-center gap-2 text-[#2563EB]">
+            <ShieldCheck className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Graceful Browser Fallbacks</h3>
+          </div>
+          <p class="text-[11px] leading-relaxed text-zinc-500">
+            For browser engines that do not natively implement `documentPictureInPicture` (such as Safari and Firefox), the library falls back gracefully to a customizable simulated floating overlay or a modal portal, maintaining identical logic and interfaces.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Usage Code Snippet -->
+    <section class="flex flex-col gap-4">
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Usage & Code Sample</h2>
+      <div class="brutal-border border-current bg-zinc-50 dark:bg-zinc-950 p-6 brutal-shadow-sm text-[11px] leading-relaxed">
+        <div class="flex justify-between items-center text-[10px] text-zinc-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 mb-3">
+          <span>REACT COMPONENT WRAPPER</span>
+          <span>App.jsx</span>
+        </div>
+        <pre class="overflow-x-auto text-[#2563EB] font-black">
+{`import React from 'react';
+import { PipWrapper, PipTrigger } from '@pip-it-up/react';
+
+function App() {
+  return (
+    <PipWrapper>
+      <div className="p-4 bg-white dark:bg-zinc-900">
+        <h3>Floating Dashboard Component</h3>
+        <p>Interactive inputs, charts, checklists...</p>
+        
+        {/* Trigger button inside wrapper */}
+        <PipTrigger>
+          <button className="px-4 py-2 bg-blue-600 text-white">
+            Pop out to PiP Window
+          </button>
+        </PipTrigger>
+      </div>
+    </PipWrapper>
+  );
+}
+
+export default App;`}</pre>
+      </div>
+    </section>
+
+    <!-- GitHub and NPM Links footer CTAs -->
+    <section class="flex flex-wrap gap-4 border-t-3 border-current pt-8 mb-8">
+      <a 
+        href="https://github.com/Shakya47/pip-it-up" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="brutal-border brutal-shadow-sm brutal-btn-hover bg-[#2563EB] text-white px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+        aria-label="View pip-it-up source code on GitHub"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+        </svg>
+        Explore GitHub Source
+      </a>
+      <a 
+        href="https://pipitup.dev" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+        aria-label="Visit pip-it-up live landing page"
+      >
+        <ExternalLink className="w-4 h-4" aria-hidden="true" />
+        Visit Live Landing Page
+      </a>
+      <a 
+        href="https://www.npmjs.com/package/@pip-it-up/react" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
+        aria-label="View @pip-it-up/react package on npm registry"
+      >
+        <ExternalLink className="w-4 h-4" aria-hidden="true" />
+        View npm Registry page
+      </a>
+    </section>
+
+    <!-- Other Selected Work navigation links -->
+    <section class="flex flex-col gap-4 border-t-3 border-current pt-8 mb-8" aria-label="Other case studies navigation">
+      <h3 class="font-black text-xs uppercase">Other Selected Work Case Studies</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <a 
+          href="/work/lender-price" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Lender Price</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/phox-health" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>Phox Health</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/culturenow" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>CultureNow</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/note-it-down" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>note-it-down Editor</span>
+          <span>&gt;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>
