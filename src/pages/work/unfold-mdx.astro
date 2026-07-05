@@ -1,17 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ThemeToggle from '../../components/ThemeToggle.tsx';
-import PipLiveDemo from '../../components/PipLiveDemo.tsx';
-import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw } from 'lucide-react';
+import UnfoldLiveDemo from '../../components/UnfoldLiveDemo.tsx';
+import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } from 'lucide-react';
 ---
 
 <Layout 
-  title="pip-it-up | Document Picture-in-Picture Toolkit" 
-  description="Deep dive into pip-it-up, a framework-agnostic core with React bindings to pop any interactive UI component into a native floating Picture-in-Picture window."
+  title="unfold-mdx | Progressive-depth Prose & Code Explanations" 
+  description="Deep dive into unfold-mdx, a React component library to build progressive-depth prose & code explanations with sentence-level prose diffing and line-level code diffs."
 >
   <!-- Nav -->
-  <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center">
-    <a href="/" class="brutal-border-sm brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-3 py-1.5 font-mono text-xs font-black uppercase border-current flex items-center gap-1.5">
+  <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
+    <a href="/" class="brutal-border-sm brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-3 py-1.5 font-mono text-xs font-black uppercase border-current flex items-center gap-1.5" aria-label="Back to landing page">
       <ArrowLeft className="w-3.5 h-3.5 stroke-[2.5]" />
       <span>BACK TO HOME</span>
     </a>
@@ -35,10 +35,10 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
         </span>
       </div>
       <h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none">
-        pip-it-up
+        unfold-mdx
       </h1>
       <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
-        A toolkit designed to pop any interactive UI component from a web application into a native, floating, always-on-top Picture-in-Picture window.
+        Progressive-depth prose & code explanations for React and MDX. Diffs consecutive snapshots at sentence & line/token levels with zero accordions or scroll jumps.
       </p>
     </header>
 
@@ -47,13 +47,13 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
       <div class="md:col-span-2 flex flex-col gap-6">
         <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Origin & Problem</h2>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Standard browser Picture-in-Picture is restricted entirely to HTML5 `&lt;video&gt;` elements. For developers building rich, interactive dashboard panels, floating checklists, chat controllers, or video editors, keeping components visible while users multi-task was impossible.
+          Technical tutorials and documentation platforms face a constant compromise: how to address both beginners and advanced developers in the same explanation. Traditional tools solve this with accordion panels, tab switches, or separate pages, all of which break focus, cause scroll jumps, and isolate content.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          In mid-2023, Chrome introduced the experimental <strong>Document Picture-in-Picture API</strong>, which allows opening a blank floating window that can be populated with arbitrary HTML content. However, the raw API is complex to manage, requiring manuals styles cloning, event listener bindings, and state preservation.
+          <strong>unfold-mdx</strong> is a headless React framework that enables inline progressive disclosure of text and code. By arranging multiple "depth levels" within a single container, the reader can drill down into a concepts details step-by-step.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          <strong>pip-it-up</strong> (documented with live previews at <a href="https://pipitup.dev" target="_blank" rel="noopener noreferrer" class="text-[#2563EB] hover:underline font-bold">pipitup.dev</a>) was created to solve these exact hurdles. It provides a simple React wrapper that abstracts the low-level DOM detaches, style mirrors, and auto-sizing observers, enabling standard component trees to be popped out with zero extra configuration.
+          Rather than simple hiding or revealing, the engine dynamically performs <strong>sentence-level prose diffing</strong> and <strong>line-and-token-level code diffing</strong> using custom tokenization algorithms. Added, updated, or deleted segments are subtly highlighted with customizable styling, creating an intuitive flow of modifications.
         </p>
       </div>
 
@@ -61,16 +61,16 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
         <h3 class="font-black text-xs uppercase border-b border-dashed border-current pb-2">Specs & Info</h3>
         <ul class="flex flex-col gap-3 text-[10px]">
           <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
-            <span class="text-zinc-400">Published packages:</span>
-            <span class="font-bold">@pip-it-up/core, @pip-it-up/react</span>
+            <span class="text-zinc-400">Published package:</span>
+            <span class="font-bold">@unfold-mdx/react</span>
           </li>
           <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
-            <span class="text-zinc-400">Total Downloads:</span>
-            <span class="font-bold">12K+ total downloads</span>
+            <span class="text-zinc-400">NPM Keywords:</span>
+            <span class="font-bold">mdx, headless, diff</span>
           </li>
           <li class="flex justify-between border-b border-zinc-200 dark:border-zinc-800 pb-1">
             <span class="text-zinc-400">Main Tech:</span>
-            <span class="font-bold">TypeScript, React, ResizeObserver</span>
+            <span class="font-bold">React, Shiki, DiffMatchPatch</span>
           </li>
           <li class="flex justify-between pb-1">
             <span class="text-zinc-400">License:</span>
@@ -84,9 +84,9 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
     <section class="brutal-border border-current p-6 brutal-shadow bg-white dark:bg-zinc-950 flex flex-col gap-4">
       <div class="border-b border-dashed border-current pb-2">
         <h2 class="text-lg font-black uppercase text-[#2563EB]">Live Interactive Demonstration</h2>
-        <p class="text-[10px] text-zinc-400">Modify lists, complete tasks, and float the panel</p>
+        <p class="text-[10px] text-zinc-400">Step through the progressive disclosure explanation of a react side-effect below</p>
       </div>
-      <PipLiveDemo client:load />
+      <UnfoldLiveDemo client:load />
     </section>
 
     <!-- Technical Architecture -->
@@ -94,47 +94,47 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
       <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Technical Deep Dive</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- ResizeObserver -->
+        <!-- Sentence-level Prose Diffing -->
         <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
           <div class="flex items-center gap-2 text-[#2563EB]">
-            <Maximize2 className="w-5 h-5" />
-            <h3 class="font-black text-xs uppercase">Auto-Sizing via ResizeObserver</h3>
+            <FileText className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Sentence Prose Diffing</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            A native Document PiP window must be opened with hardcoded dimensions. To prevent truncated content or large empty gaps, `pip-it-up` runs a `ResizeObserver` on the target component, dynamically resizing the floating window in real time whenever internal element heights change.
+            Instead of diffing by character or word, which creates distracting fragments, `unfold-mdx` tokenizes prose by sentence. It runs Google's `diff-match-patch` across these sentence arrays, pinpointing exactly where items are added or modified, and mapping them to visual states with data-attributes.
           </p>
         </div>
 
-        <!-- Style Sync -->
+        <!-- Token-level Code Diffing -->
         <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
           <div class="flex items-center gap-2 text-[#2563EB]">
-            <RefreshCw className="w-5 h-5" />
-            <h3 class="font-black text-xs uppercase">Style Sync via MutationObserver</h3>
+            <Layers className="w-5 h-5" />
+            <h3 class="font-black text-xs uppercase">Line & Token Code Diffing</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Since the floating PiP window uses a separate browser document, standard stylesheet references are lost. `pip-it-up` automatically copies all `style` and `link` tags into the PiP window, and uses a `MutationObserver` on the parent document's head to copy styling updates (like Tailwind theme swaps) dynamically.
+            For code codeblocks, the library computes line-by-line additions and updates. If a line is modified, it runs a secondary character diff to generate token spans for added text inline. This avoids drawing full block insertions for single-character edits.
           </p>
         </div>
 
-        <!-- DOM Detach -->
+        <!-- Shiki Integration -->
         <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
           <div class="flex items-center gap-2 text-[#2563EB]">
             <Zap className="w-5 h-5" />
-            <h3 class="font-black text-xs uppercase">State Preservation via DOM Detach</h3>
+            <h3 class="font-black text-xs uppercase">Asynchronous Shiki Coloring</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Traditional popup windows re-render from scratch, losing input cursor focus, undo stacks, and transient component state. `pip-it-up` dynamically moves the active DOM nodes into the PiP window frame rather than duplicating them, keeping state and references intact.
+            Syntax coloring uses Shiki's highlighter engine. Because Shiki is heavy and loads grammars asynchronously, the library falls back to uncolored raw diff markup instantly on hydration, then swap colors once loaded without layout jumps.
           </p>
         </div>
 
-        <!-- Graceful Fallbacks -->
+        <!-- Headless & SSR Fallbacks -->
         <div class="brutal-border bg-white dark:bg-zinc-900 border-current p-5 brutal-shadow-sm flex flex-col gap-3">
           <div class="flex items-center gap-2 text-[#2563EB]">
             <ShieldCheck className="w-5 h-5" />
-            <h3 class="font-black text-xs uppercase">Graceful Browser Fallbacks</h3>
+            <h3 class="font-black text-xs uppercase">SSR & No-JS Graceful Fallback</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            For browser engines that do not natively implement `documentPictureInPicture` (such as Safari and Firefox), the library falls back gracefully to a customizable simulated floating overlay or a modal portal, maintaining identical logic and interfaces.
+            To satisfy SEO indexing requirements, all code snapshots and text levels are compiled into the server-rendered HTML payload. The deepest level is shown by default. Once client JS loads, active visibility switches over and hydrates into the interactive control deck.
           </p>
         </div>
       </div>
@@ -145,43 +145,45 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
       <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Usage & Code Sample</h2>
       <div class="brutal-border border-current bg-zinc-50 dark:bg-zinc-950 p-6 brutal-shadow-sm text-[11px] leading-relaxed">
         <div class="flex justify-between items-center text-[10px] text-zinc-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 mb-3">
-          <span>REACT COMPONENT WRAPPER</span>
-          <span>App.jsx</span>
+          <span>MDX IMPLEMENTATION EXAMPLE</span>
+          <span>explanation.mdx</span>
         </div>
         <pre class="overflow-x-auto text-[#2563EB] font-black">
-{`import React from 'react';
-import { PipWrapper, PipTrigger } from '@pip-it-up/react';
+{`import { Depth, DepthLevel, DepthCode } from "@unfold-mdx/react";
+import "@unfold-mdx/react/theme.css";
 
-function App() {
-  return (
-    <PipWrapper>
-      <div className="p-4 bg-white dark:bg-zinc-900">
-        <h3>Floating Dashboard Component</h3>
-        <p>Interactive inputs, charts, checklists...</p>
-        
-        {/* Trigger button inside wrapper */}
-        <PipTrigger>
-          <button className="px-4 py-2 bg-blue-600 text-white">
-            Pop out to PiP Window
-          </button>
-        </PipTrigger>
-      </div>
-    </PipWrapper>
-  );
-}
+<Depth show="both" orientation="horizontal" ratio={0.5} indicators={true}>
+  <DepthLevel label="Basic">
+    Fission splits a heavy atom into two lighter ones.
+  </DepthLevel>
+  <DepthCode lang="js">
+  \`\`\`js
+  const status = "splitting";
+  \`\`\`
+  </DepthCode>
 
-export default App;`}</pre>
+  <DepthLevel label="Triggered">
+    Fission splits a heavy atom into two lighter ones.
+    The split is triggered by a neutron striking the nucleus.
+  </DepthLevel>
+  <DepthCode lang="js">
+  \`\`\`js
+  const status = "splitting";
+  const trigger = "neutron";
+  \`\`\`
+  </DepthCode>
+</Depth>`}</pre>
       </div>
     </section>
 
     <!-- GitHub and NPM Links footer CTAs -->
     <section class="flex flex-wrap gap-4 border-t-3 border-current pt-8 mb-8">
       <a 
-        href="https://github.com/Shakya47/pip-it-up" 
+        href="https://github.com/Shakya47/unfold-mdx" 
         target="_blank" 
         rel="noopener noreferrer"
         class="brutal-border brutal-shadow-sm brutal-btn-hover bg-[#2563EB] text-white px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
-        aria-label="View pip-it-up source code on GitHub"
+        aria-label="View unfold-mdx source code on GitHub"
       >
         <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
           <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
@@ -189,21 +191,21 @@ export default App;`}</pre>
         Explore GitHub Source
       </a>
       <a 
-        href="https://pipitup.dev" 
+        href="https://shakya47.github.io/unfold-mdx" 
         target="_blank" 
         rel="noopener noreferrer"
         class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
-        aria-label="Visit pip-it-up live landing page"
+        aria-label="Visit unfold-mdx live landing page"
       >
         <ExternalLink className="w-4 h-4" aria-hidden="true" />
         Visit Live Landing Page
       </a>
       <a 
-        href="https://www.npmjs.com/package/@pip-it-up/react" 
+        href="https://www.npmjs.com/package/@unfold-mdx/react" 
         target="_blank" 
         rel="noopener noreferrer"
         class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border px-6 py-3 font-black uppercase text-xs border-current flex items-center gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-accent"
-        aria-label="View @pip-it-up/react package on npm registry"
+        aria-label="View @unfold-mdx/react package on npm registry"
       >
         <ExternalLink className="w-4 h-4" aria-hidden="true" />
         View npm Registry page
@@ -213,12 +215,19 @@ export default App;`}</pre>
     <!-- Other Selected Work navigation links -->
     <section class="flex flex-col gap-4 border-t-3 border-current pt-8 mb-8" aria-label="Other case studies navigation">
       <h3 class="font-black text-xs uppercase">Other Selected Work Case Studies</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <a 
-          href="/work/unfold-mdx" 
-          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-[#2563EB] text-white p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+          href="/work/pip-it-up" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
         >
-          <span>unfold-mdx</span>
+          <span>pip-it-up</span>
+          <span>&gt;</span>
+        </a>
+        <a 
+          href="/work/note-it-down" 
+          class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
+        >
+          <span>note-it-down Editor</span>
           <span>&gt;</span>
         </a>
         <a 
@@ -243,10 +252,10 @@ export default App;`}</pre>
           <span>&gt;</span>
         </a>
         <a 
-          href="/work/note-it-down" 
+          href="/work/zero-knowledge-sync" 
           class="brutal-border brutal-shadow-sm brutal-btn-hover bg-white dark:bg-zinc-900 text-light-border dark:text-dark-border p-4 font-black uppercase text-xs border-current flex items-center justify-between"
         >
-          <span>note-it-down Editor</span>
+          <span>ZK Sync Layer</span>
           <span>&gt;</span>
         </a>
       </div>

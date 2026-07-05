@@ -127,6 +127,16 @@ export const portfolioData: Record<string, LocalizedPortfolio> = {
         ]
       },
       {
+        title: "UNFOLD-MDX EXPLANATIONS",
+        desc: "A progressive-depth prose & code explanation library for React & MDX, with sentence-level prose diffing and line-level code token diffing.",
+        tags: ["React", "MDX", "Shiki", "DiffMatchPatch"],
+        url: "/work/unfold-mdx",
+        imageClass: "bg-gradient-to-tr from-violet-900 to-fuchsia-950",
+        ctas: [
+          { label: "Explore Case Study", url: "/work/unfold-mdx", type: "primary" }
+        ]
+      },
+      {
         title: "CULTURENOW PORTAL",
         desc: "Optimized stability and accessibility for an interactive cultural mapping guide. Established Core Web Vitals audits and eliminated render-blocking dependencies.",
         tags: ["HTML/CSS", "JavaScript", "A11y", "Web Vitals"],
@@ -195,6 +205,12 @@ export const portfolioData: Record<string, LocalizedPortfolio> = {
       }
     ],
     contributions: [
+      {
+        date: "JUN 2026",
+        title: "unfold-mdx (@unfold-mdx/react) - Progressive-depth prose & code explanations for React & MDX",
+        tags: ["OSS", "npm", "Project"],
+        url: "/work/unfold-mdx"
+      },
       {
         date: "NOV 2023",
         title: "pip-it-up (@pip-it-up/core & @pip-it-up/react) - Document Picture-in-Picture library",
