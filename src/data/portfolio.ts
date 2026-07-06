@@ -214,13 +214,13 @@ export const portfolioData: Record<string, LocalizedPortfolio> = {
       {
         date: "NOV 2023",
         title: "pip-it-up (@pip-it-up/core & @pip-it-up/react) - Document Picture-in-Picture library",
-        tags: ["OSS", "npm"],
+        tags: ["OSS", "npm", "Project"],
         url: "/work/pip-it-up"
       },
       {
         date: "OCT 2023",
         title: "note-it-down - Floating always-on-top text editor Chrome Extension powered by Document PiP",
-        tags: ["Project"],
+        tags: ["OSS", "Project"],
         url: "/work/note-it-down"
       },
       {
