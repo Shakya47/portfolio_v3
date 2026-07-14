@@ -160,7 +160,7 @@ export const portfolioData: Record<string, LocalizedPortfolio> = {
     experience: [
       {
         company: "Liftoff LLC",
-        role: "Senior Software Engineer",
+        role: "Software Engineer",
         period: "Dec 2023 – Present",
         location: "Bengaluru, India",
         highlights: [
