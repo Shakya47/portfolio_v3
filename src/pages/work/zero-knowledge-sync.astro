@@ -9,7 +9,7 @@ const portfolio = getPortfolio('en');
 
 <Layout 
   title="Designing a Server-Blind Sync Layer using WebCrypto APIs" 
-  description="Technical deep dive on building a zero-knowledge sync layer using browser WebCrypto APIs (HKDF-SHA256, HMAC, and AES-GCM-256) on Cloudflare Workers."
+  description="How we built private, end-to-end encrypted note syncing using browser WebCrypto APIs and Cloudflare Workers."
 >
   <!-- Nav -->
   <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
@@ -27,7 +27,7 @@ const portfolio = getPortfolio('en');
     <header class="flex flex-col gap-4 border-b-3 border-current pb-8">
       <div class="flex flex-wrap gap-2">
         <span class="brutal-border-sm px-2.5 py-0.5 bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300 border-purple-400 text-[10px] font-extrabold uppercase tracking-wide">
-          Security & A11y
+          Security
         </span>
         <span class="brutal-border-sm px-2.5 py-0.5 bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-400 text-[10px] font-extrabold uppercase tracking-wide">
           WebCrypto API
@@ -40,7 +40,7 @@ const portfolio = getPortfolio('en');
         Server-Blind Sync Layer
       </h1>
       <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
-        Building a zero-knowledge, end-to-end encrypted note sync relay using client-side key derivations and serverless database storage.
+        How we built private, end-to-end encrypted note syncing using browser WebCrypto APIs and Cloudflare Workers.
       </p>
     </header>
 
@@ -48,10 +48,10 @@ const portfolio = getPortfolio('en');
     <section class="flex flex-col gap-6">
       <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Architectural Problem</h2>
       <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-        When sync layers are designed, developers typically store credentials (passwords, auth sessions) and decryptable data directly in a centralized database. This exposes user notes to breaches and data snooping.
+        Most sync setups store user passwords and readable data directly on a central server. If the database gets leaked or breached, all user notes are exposed.
       </p>
       <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-        To address this on <strong>Note It Down</strong>, we built a <strong>zero-knowledge boundary</strong>: a serverless relay where your sync token and encryption keys never leave the browser. The database (Cloudflare KV) only stores encrypted bytes, and the edge worker verifies write requests without knowing the underlying raw credentials.
+        For <strong>Note It Down</strong>, we wanted a zero-knowledge setup. Your encryption keys never leave your browser. The Cloudflare KV database only ever sees encrypted blobs, and the server validates write permissions without knowing your raw token.
       </p>
     </section>
 

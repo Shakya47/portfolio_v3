@@ -95,7 +95,7 @@ export default function PipLiveDemo() {
       </ul>
 
       <div className="text-[10px] font-mono text-zinc-500 border-t border-dashed border-current pt-2 mt-1">
-        Try modifying tasks in either window — states are reactive and fully preserved.
+        Edit tasks in either window — changes sync right away.
       </div>
     </div>
   );
@@ -146,7 +146,7 @@ export default function PipLiveDemo() {
               <span>{isSimulatedPip ? "MINIMIZE PIP" : "SIMULATE PIP"}</span>
             </button>
             <p className="text-[9px] font-mono text-zinc-500 text-center leading-tight">
-              ⚠️ Native Document PiP requires Chrome. Simulated PiP active here.
+              ⚠️ Chrome supports native Document PiP. Running simulated mode here.
             </p>
           </div>
         </div>

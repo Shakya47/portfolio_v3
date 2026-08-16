@@ -86,9 +86,9 @@ export default function UnfoldLiveDemo() {
         >
           {/* STEP 1 */}
           <DepthLevel label="Basic Fetch">
-            This basic react pattern runs a side effect to fetch data from an API on mount.
-            It saves the result in a local state variable.
-            We use an empty dependency array to run this setup exactly once.
+            This fetches data from an API when the component mounts.
+            It stores the result in local state.
+            The empty dependency array ensures it runs just once.
           </DepthLevel>
           <DepthCode lang="javascript" label="useFetch.js">
 {`function useFetch(url) {
@@ -106,11 +106,11 @@ export default function UnfoldLiveDemo() {
 
           {/* STEP 2 */}
           <DepthLevel label="Race Condition Guard">
-            This basic react pattern runs a side effect to fetch data from an API on mount.
-            It saves the result in a local state variable.
-            We use an empty dependency array to run this setup exactly once.
-            To avoid race conditions where a fast request updates state after a slow request, we add an ignore flag.
-            We toggle this flag inside the effect cleanup phase.
+            This fetches data from an API when the component mounts.
+            It stores the result in local state.
+            The empty dependency array ensures it runs just once.
+            To prevent race conditions when requests finish out of order, we add an ignore flag.
+            We set the flag to true in the cleanup function.
           </DepthLevel>
           <DepthCode lang="javascript" label="useFetch.js">
 {`function useFetch(url) {
@@ -136,12 +136,12 @@ export default function UnfoldLiveDemo() {
 
           {/* STEP 3 */}
           <DepthLevel label="Add Loading & Error State">
-            This basic react pattern runs a side effect to fetch data from an API on mount.
-            It saves the result in a local state variable.
-            We use an empty dependency array to run this setup exactly once.
-            To avoid race conditions where a fast request updates state after a slow request, we add an ignore flag.
-            We toggle this flag inside the effect cleanup phase.
-            We also include loading and error states to improve UX and handle request failures gracefully.
+            This fetches data from an API when the component mounts.
+            It stores the result in local state.
+            The empty dependency array ensures it runs just once.
+            To prevent race conditions when requests finish out of order, we add an ignore flag.
+            We set the flag to true in the cleanup function.
+            We also track loading and error states so the UI handles slow networks and network errors cleanly.
           </DepthLevel>
           <DepthCode lang="javascript" label="useFetch.js">
 {`function useFetch(url) {

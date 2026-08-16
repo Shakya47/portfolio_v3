@@ -10,7 +10,7 @@ const { contact } = portfolio;
 
 <Layout 
   title="Lender Price | Mortgage Pricing Engine Case Study" 
-  description="Deep dive into Saurabh Shakya's work re-architecting Lender Price's mortgage Product & Pricing Engine (PPE), optimizing response latency by 89% and implementing O(1) fractional indexing."
+  description="How I sped up Lender Price's mortgage Product & Pricing Engine (PPE), cutting latency by 89% and implementing O(1) fractional indexing."
 >
   <!-- Nav -->
   <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
@@ -41,7 +41,7 @@ const { contact } = portfolio;
         Lender Price PPE
       </h1>
       <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
-        Re-architecting an enterprise Product & Pricing Engine (PPE) for banks and wholesale lenders, serving major clients like JPMorgan Chase.
+        Speeding up a mortgage pricing engine used by major lenders and banks, including JPMorgan Chase.
       </p>
     </header>
 
@@ -50,10 +50,10 @@ const { contact } = portfolio;
       <div class="md:col-span-2 flex flex-col gap-6">
         <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Challenge & Context</h2>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Lender Price is a cloud-native SaaS platform that automates pricing, rules, eligibility, and lock workflows for the mortgage industry. Loan secondary market teams rely on it to manage granular margin guidelines.
+          Lender Price helps mortgage lenders calculate loan pricing, eligibility rules, and rate lock margins in real time.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          The core challenge centered on a critical calculation query returning up to <strong>13,000 active rates</strong>. The API request took <strong>9 minutes</strong> to resolve, generating a massive <strong>240MB raw payload</strong>. This volume saturated network bandwidth and caused client-side browsers to freeze during table render and sorting workflows.
+          We hit a major bottleneck on our pricing calculation query. A single search could return up to <strong>13,000 rates</strong>, taking <strong>9 minutes</strong> to respond and dumping a <strong>240MB payload</strong> on the browser. The page would freeze, and loan officers couldn't do their work.
         </p>
       </div>
 
@@ -91,28 +91,28 @@ const { contact } = portfolio;
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Situation</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            Standard table pagination was rejected by business requirements: loan officers needed to filter and compare against the entire result set of 13,000 rates simultaneously. Rendering the raw array froze browser threads.
+            We couldn't just add standard page numbers because loan officers needed to sort and compare rates across the entire dataset at once. But rendering 13,000 table rows crashed browser tabs.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Task</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            Re-engineer the data retrieval pipeline across the Angular client and Kotlin APIs to shrink payload sizes and improve rendering speeds, while maintaining global filtering capabilities.
+            Fix the data pipeline across our Angular frontend and Kotlin backend so searches returned in seconds without losing global filtering.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Action</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            I proposed and co-designed a **Server-Side Grouping contract**. Instead of returning raw rate rows, the backend aggregated results by unique mortgage rate groups, shrinking the root array from 13,000 to ~250–300 groups. The detailed rows within each group were lazy-loaded on-demand when clicked.
+            I worked with the backend team to design a **Server-Side Grouping contract**. Instead of sending 13,000 individual rate rows, the backend grouped rates into ~250 summary buckets. Detailed rows only load when a user clicks to expand a specific group.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Result</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            API latency fell from 9 minutes to 1 minute, and the payload shrank by 99% (from 240MB down to ~3MB). Client-side table rendering became instantaneous, completely eliminating thread freezes.
+            Response times dropped from 9 minutes to ~1 minute (an 89% speedup), and the payload shrank from 240MB down to ~3MB. The frontend table renders instantly with zero browser lag.
           </p>
         </div>
       </div>
@@ -130,7 +130,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">O(1) Fractional Indexing</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Reordering rate rule priorities used O(N) integer array rewrites, causing database locks. By implementing fractional indexing, we calculate float boundaries between adjacent rows, resolving drag-and-drop operations in a single O(1) database update with zero concurrency write conflicts.
+            Reordering rules previously required updating index numbers on every subsequent row in the database, causing locks during heavy use. We switched to fractional indexing (calculating midpoints between items), turning drag-and-drop reorders into a single O(1) database write.
           </p>
         </div>
 
@@ -141,7 +141,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Webpack Bundle Optimization</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Identified import bloating via Webpack Bundle Analyzer. Reduced Angular bundle size by 48% by pruning monolithic library imports, adopting tree-shakeable ES module syntax, and setting up route-level lazy loading for auxiliary lending sub-modules.
+            Ran Webpack Bundle Analyzer to identify bloated dependencies. We removed unused packages, switched to tree-shakeable imports, and added lazy loading for sub-routes, cutting total bundle size by 48%.
           </p>
         </div>
 
@@ -152,7 +152,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Change Detection & Memoization</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Tuned UI sluggishness by switching dynamic pricing templates from default dirty-checking to `OnPush` change detection. Added explicit `trackBy` keys to loops and eliminated re-renders on immutable object identity checks.
+            Fixed UI stuttering by switching pricing table components to Angular OnPush change detection. Added trackBy functions to all loops to stop Angular from re-rendering unchanged DOM rows.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Cross-Stack Debugging</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Acting as a cross-stack engineer, diagnosed database and integration bugs directly within Spring Boot and Kotlin API modules. Maintained SonarQube quality gates, enforcing an 80% code coverage threshold on calculation logic.
+            Dove into the Kotlin and Spring Boot backend to debug query bottlenecks and integration issues directly. Maintained SonarQube quality gates with >80% test coverage on critical calculation math.
           </p>
         </div>
       </div>
