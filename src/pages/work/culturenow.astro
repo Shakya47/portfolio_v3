@@ -10,7 +10,7 @@ const { contact } = portfolio;
 
 <Layout 
   title="CultureNow | Accessibility & Performance Optimization Case Study" 
-  description="Deep dive into Saurabh Shakya's work at Accenture maintaining CultureNow, optimizing Web Vitals, solving render bottlenecks, and ensuring WCAG compliance."
+  description="How I cleaned up render bottlenecks, resolved 30+ legacy UI bugs, and improved WCAG accessibility for CultureNow."
 >
   <!-- Nav -->
   <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
@@ -41,7 +41,7 @@ const { contact } = portfolio;
         CultureNow Portal
       </h1>
       <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
-        Improving stability, mobile performance, and screen reader accessibility for a public-domain cultural mapping platform.
+        Fixing bugs, cleaning up slow assets, and improving screen reader accessibility on a public city art map.
       </p>
     </header>
 
@@ -50,10 +50,10 @@ const { contact } = portfolio;
       <div class="md:col-span-2 flex flex-col gap-6">
         <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Challenge & Context</h2>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          CultureNow functions as a digital public registry and museum guide, mapping thousands of art installations, historical locations, and architectural sights.
+          CultureNow is a public digital map and directory tracking thousands of outdoor artworks, historic landmarks, and architectural sights across US cities.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          During my tenure at Accenture, the platform faced stability issues due to historical browser-specific rendering bugs, unoptimized script loading, and compliance gaps preventing visually impaired users from navigating content.
+          During my time at Accenture, the platform had accumulated legacy bugs, slow page loads on mobile, and accessibility gaps that made it unusable for people with screen readers.
         </p>
       </div>
 
@@ -91,28 +91,28 @@ const { contact } = portfolio;
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Situation</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            The legacy application suffered from recurring frontend bugs, visual regressions, and interface misalignments across different device browsers, causing user drop-offs.
+            The app had frequent UI glitches, broken filters in Safari, and unstyled layout shifts that caused visitors to leave.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Task</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            Triage, debug, and resolve high-priority visual and functional issues, while implementing preventive audit measures in our workflow.
+            Find and fix high-priority visual bugs, speed up asset loading, and make sure the site met WCAG accessibility standards.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Action</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            I analyzed issue patterns using Chrome DevTools, network traces, and user session error logs. I fixed rendering bugs in map modules, optimized asynchronous asset loading, resolved style regressions, and modified raw input elements to support screen-reader visibility landmarks.
+            I used Chrome DevTools and error traces to track down layout regressions. I fixed broken map filters, removed render-blocking CSS files, improved image loading, and added proper ARIA labels and keyboard focus states across all interactive elements.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Result</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            Successfully resolved 30+ critical production tickets. Stabilized core navigation flows, improved lighthouse scores, and secured clean screen-reader output for mapping layouts.
+            Resolved 30+ critical production bugs, significantly boosted Lighthouse performance scores, and made the map fully accessible to keyboard and screen-reader users.
           </p>
         </div>
       </div>
@@ -130,7 +130,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Legacy Triage Process</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Triaged tickets by severity and created a central registry documenting common frontend regressions (like incorrect absolute offsets and layout overlaps in older Safari browsers), reducing recurring bug frequencies.
+            Documented common cross-browser bugs (like Safari layout offsets) in a shared team guide, helping our team resolve similar UI tickets much faster.
           </p>
         </div>
 
@@ -141,7 +141,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Web Vitals Audit Checkpoints</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Introduced Lighthouse audits (tracking Largest Contentful Paint LCP, Cumulative Layout Shift CLS, and Interaction to Next Paint INP) into the pipeline, identifying and removing render-blocking inline style modules.
+            Added Lighthouse audits to catch slow render-blocking CSS and large assets before deploying, improving Largest Contentful Paint (LCP) and Cumulative Layout Shift (CLS).
           </p>
         </div>
 
@@ -152,7 +152,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">WCAG Accessibility (A11y)</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Optimized interactive mapping filters for keyboard navigation. Ensured correct screen-reader announcements by applying descriptive ARIA labels, focus state rings, and semantic landmarks across layouts.
+            Made interactive map search and filters fully usable with keyboards. Added clear ARIA labels, visible focus rings, and proper HTML headings so screen readers announce results correctly.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Component Unit Testing</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Authored unit tests using Jest and Karma/Jasmine to cover regression-prone routing filters and layout boundaries, securing high regression protection metrics for future product improvements.
+            Wrote unit tests in Jest and Jasmine to cover map filter logic and route changes, preventing future regressions.
           </p>
         </div>
       </div>

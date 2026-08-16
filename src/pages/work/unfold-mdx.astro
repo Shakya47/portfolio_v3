@@ -7,7 +7,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } f
 
 <Layout 
   title="unfold-mdx | Progressive-depth Prose & Code Explanations" 
-  description="Deep dive into unfold-mdx, a React component library to build progressive-depth prose & code explanations with sentence-level prose diffing and line-level code diffs."
+  description="How I built unfold-mdx: a React library for step-by-step prose and code explanations with sentence and token-level diffing."
 >
   <!-- Nav -->
   <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
@@ -38,7 +38,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } f
         unfold-mdx
       </h1>
       <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
-        Progressive-depth prose & code explanations for React and MDX. Diffs consecutive snapshots at sentence & line/token levels with zero accordions or scroll jumps.
+        A React & MDX library for progressive technical explanations. Highlights changes sentence by sentence and token by token as readers drill deeper.
       </p>
     </header>
 
@@ -47,13 +47,13 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } f
       <div class="md:col-span-2 flex flex-col gap-6">
         <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Origin & Problem</h2>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Technical tutorials and documentation platforms face a constant compromise: how to address both beginners and advanced developers in the same explanation. Traditional tools solve this with accordion panels, tab switches, or separate pages, all of which break focus, cause scroll jumps, and isolate content.
+          Writing technical docs is hard because readers have different backgrounds. Beginners need context, while experienced devs just want the core details. Standard fixes like accordions, tabs, or separate pages break reading flow and cause jarring scroll jumps.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          <strong>unfold-mdx</strong> is a headless React framework that enables inline progressive disclosure of text and code. By arranging multiple "depth levels" within a single container, the reader can drill down into a concepts details step-by-step.
+          I created <strong>unfold-mdx</strong> to solve this with progressive disclosure. You write your explanation in increasing levels of depth, and readers step through at their own pace.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Rather than simple hiding or revealing, the engine dynamically performs <strong>sentence-level prose diffing</strong> and <strong>line-and-token-level code diffing</strong> using custom tokenization algorithms. Added, updated, or deleted segments are subtly highlighted with customizable styling, creating an intuitive flow of modifications.
+          Instead of hiding and showing big chunks of text, the library diffs each level sentence by sentence and code token by token. Readers see exactly what changed as the concept unfolds.
         </p>
       </div>
 
@@ -91,7 +91,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } f
 
     <!-- Technical Architecture -->
     <section id="technical-deep-dive" class="flex flex-col gap-6">
-      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Technical Deep Dive</h2>
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">How It Works Under the Hood</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Sentence-level Prose Diffing -->
@@ -101,7 +101,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } f
             <h3 class="font-black text-xs uppercase">Sentence Prose Diffing</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Instead of diffing by character or word, which creates distracting fragments, `unfold-mdx` tokenizes prose by sentence. It runs Google's `diff-match-patch` across these sentence arrays, pinpointing exactly where items are added or modified, and mapping them to visual states with data-attributes.
+            Diffing prose character-by-character creates ugly, choppy highlights. unfold-mdx splits text into full sentences first, runs diff-match-patch on them, and highlights new or modified sentences cleanly.
           </p>
         </div>
 
@@ -112,7 +112,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } f
             <h3 class="font-black text-xs uppercase">Line & Token Code Diffing</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            For code codeblocks, the library computes line-by-line additions and updates. If a line is modified, it runs a secondary character diff to generate token spans for added text inline. This avoids drawing full block insertions for single-character edits.
+            For code snippets, it finds changed lines first. If only a variable name or small argument changed inside a line, it diffs individual tokens so you don't get giant green blocks for a one-word tweak.
           </p>
         </div>
 
@@ -123,7 +123,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } f
             <h3 class="font-black text-xs uppercase">Asynchronous Shiki Coloring</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Syntax coloring uses Shiki's highlighter engine. Because Shiki is heavy and loads grammars asynchronously, the library falls back to uncolored raw diff markup instantly on hydration, then swap colors once loaded without layout jumps.
+            Shiki produces great syntax highlighting, but loading language grammars takes time. unfold-mdx renders unhighlighted diffs instantly on load, then applies syntax colors as soon as Shiki finishes without causing layout shifts.
           </p>
         </div>
 
@@ -134,7 +134,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Layers, FileText } f
             <h3 class="font-black text-xs uppercase">SSR & No-JS Graceful Fallback</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            To satisfy SEO indexing requirements, all code snapshots and text levels are compiled into the server-rendered HTML payload. The deepest level is shown by default. Once client JS loads, active visibility switches over and hydrates into the interactive control deck.
+            Search engines need to read the full text. All depth levels render in the initial server HTML, defaulting to the complete explanation. Once JavaScript loads, the interactive step controls take over.
           </p>
         </div>
       </div>

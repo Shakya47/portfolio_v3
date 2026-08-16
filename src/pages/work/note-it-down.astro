@@ -9,7 +9,7 @@ const portfolio = getPortfolio('en');
 
 <Layout 
   title="Note It Down | Zero-Knowledge Sync Notepad" 
-  description="Deep dive into note-it-down, a note-taking Chrome Extension leveraging the Document Picture-in-Picture API and zero-knowledge Cloudflare Worker KV sync."
+  description="How I built Note It Down: a floating notepad Chrome extension using Document Picture-in-Picture and private zero-knowledge sync."
 >
   <!-- Nav -->
   <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
@@ -40,7 +40,7 @@ const portfolio = getPortfolio('en');
         Note It Down 📝
       </h1>
       <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
-        A note-taking Chrome Extension leveraging the modern Document Picture-in-Picture (PiP) API to create floating, borderless, always-on-top text editors.
+        A clean Chrome extension that gives you a floating, always-on-top notepad using Document Picture-in-Picture and private zero-knowledge sync.
       </p>
     </header>
 
@@ -86,7 +86,7 @@ const portfolio = getPortfolio('en');
 
     <!-- Key Features -->
     <section class="flex flex-col gap-6">
-      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Core Implementation</h2>
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Core Features</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Floating PiP Editor -->
@@ -96,7 +96,7 @@ const portfolio = getPortfolio('en');
             <h3 class="font-black text-xs uppercase">Floating PiP Window</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Pops out any active note into a native, always-on-top Document Picture-in-Picture canvas. This strips away default browser margins, headers, and footers, creating a clean full-bleed editor pane to prevent alt-tabbing.
+            Pops your active note into a borderless, floating Picture-in-Picture window that stays on top of other desktop windows, so you can take notes while watching videos or reading docs without alt-tabbing.
           </p>
         </div>
 
@@ -107,7 +107,7 @@ const portfolio = getPortfolio('en');
             <h3 class="font-black text-xs uppercase">Shadow DOM Isolation</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            The sidebar launcher script mounts the React editor container within an isolated Shadow DOM context on host pages (like Reddit or GitHub), completely preventing host CSS sheets from breaking styles or leaking resets.
+            Mounts the extension UI inside an isolated Shadow DOM on host pages. This stops host page CSS (like on Reddit or GitHub) from breaking the sidebar layout.
           </p>
         </div>
 
@@ -118,7 +118,7 @@ const portfolio = getPortfolio('en');
             <h3 class="font-black text-xs uppercase">Zero-Knowledge Storage</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            A secure system using derived AES-GCM-256 keys. Notes are encrypted client-side using WebCrypto APIs before sync transmission. The worker server only receives encrypted blobs, keeping credentials private.
+            Encrypts notes right in your browser using AES-GCM-256 before transmitting anything. The worker server only receives encrypted blobs, so your notes stay private.
           </p>
         </div>
 
@@ -129,7 +129,7 @@ const portfolio = getPortfolio('en');
             <h3 class="font-black text-xs uppercase">Cloudflare Edge KV Relay</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Notes sync directly to your self-hosted Cloudflare Worker. Cloudflare's free tier provides 1GB storage and 100,000 requests/day, making cross-device relays fast, private, and free to host.
+            Notes sync directly through a self-hosted Cloudflare Worker. Cloudflare's free tier provides 1GB storage and 100,000 requests/day, making cross-device sync fast and free to host.
           </p>
         </div>
       </div>
@@ -139,10 +139,10 @@ const portfolio = getPortfolio('en');
     <section class="flex flex-col gap-6">
       <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">🧩 Powered by pip-it-up</h2>
       <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-        This extension was designed to demonstrate how effortlessly you can wrap any React component in a native PiP frame using the `@pip-it-up/react` library.
+        I built this extension partly to show how easily @pip-it-up/react lets you float any React component in a native desktop window.
       </p>
       <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-        Here is the exact controlled integration from the `EditorOverlay.tsx` file inside our codebase:
+        Here is the actual wrapper code from EditorOverlay.tsx:
       </p>
 
       <div class="brutal-border border-current p-4 bg-[#0E0E10] text-zinc-100 text-[10px] leading-relaxed overflow-x-auto brutal-shadow-sm">

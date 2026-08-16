@@ -10,7 +10,7 @@ const { contact } = portfolio;
 
 <Layout 
   title="Phox Health | Clinical Logistics Monorepo Case Study" 
-  description="Deep dive into Saurabh Shakya's work consolidating Phox Health's clinical logistics systems into a unified React Nx Monorepo, optimizing state, notifications, and SEO."
+  description="How I consolidated Phox Health's medical delivery dashboards into a single fast React monorepo with Zustand and background push notifications."
 >
   <!-- Nav -->
   <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center" aria-label="Main Navigation">
@@ -41,7 +41,7 @@ const { contact } = portfolio;
         Phox Health
       </h1>
       <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
-        Consolidating clinical delivery logistics systems and medical courier networks into a high-performance React monorepo architecture.
+        Consolidating medical courier tracking and delivery dashboards into a single fast React monorepo.
       </p>
     </header>
 
@@ -50,10 +50,10 @@ const { contact } = portfolio;
       <div class="md:col-span-2 flex flex-col gap-6">
         <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Challenge & Context</h2>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Phox Health is a healthcare logistics platform managing medication deliveries, cold chain packaging, and real-time medical courier courier runs.
+          Phox Health coordinates medical deliveries, cold-chain medication shipments, and hospital courier runs.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Originally, three independent React codebases (for pharmacies, lab networks, and couriers) had grown separately. This resulted in extensive code duplication, inconsistent user experience, desynchronized TypeScript contracts, and slow cross-application features.
+          Over time, three separate React apps (one each for pharmacies, labs, and couriers) were built independently. They had duplicate components, mismatched TypeScript types, inconsistent styling, and making changes across all three was painfully slow.
         </p>
       </div>
 
@@ -91,28 +91,28 @@ const { contact } = portfolio;
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Situation</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            Developers spent hours manually keeping styles, API contracts, and utilities in sync across multiple repositories. Shared business features had diverging logic branches.
+            Developers were constantly copying and pasting code between 3 different repositories. Bug fixes in one app were often forgotten in the other two.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Task</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            Consolidate codebases into an Nx Monorepo structure, isolating reusable primitives while maintaining app boundaries and CI check velocity.
+            Merge all three apps into an Nx monorepo, extract shared UI components, and streamline our CI build pipeline without interrupting active deployments.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Action</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            I designed a modular monorepo directory: split core components into standard UI libraries, isolated logic into utility packages, and created unified TypeScript interfaces. I led the step-by-step incremental migration of each repository and configured `nx affected` commands so CI only runs tests on modified modules.
+            I set up an Nx monorepo, moved shared UI components and utility helpers into reusable packages, and standardized TypeScript interfaces across apps. I also configured `nx affected` so CI only tests and builds apps touched in a pull request.
           </p>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-bold text-[#2563EB] text-[10px] uppercase">Result</span>
           <p class="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-            Removed ~40% of duplicated code structures. CI pipeline execution was optimized, allowing development teams to ship unified features across clinical apps significantly faster.
+            Cut duplicated code by ~40% and cut CI build times in half. Shipping updates across all three clinical portals became much faster and less error-prone.
           </p>
         </div>
       </div>
@@ -130,7 +130,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Nx Monorepo Boundary Gates</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Enforced strict boundary lint rules within the monorepo configuration (e.g. preventing presentation libraries from directly importing server configurations), eliminating circular references and maintaining code decoupling.
+            Set up strict ESLint boundary rules in Nx to prevent UI packages from accidentally importing backend configs, keeping code modular and avoiding messy dependency loops.
           </p>
         </div>
 
@@ -141,7 +141,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Zustand Hook-Based Stores</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Implemented Zustand stores to manage global state boundaries across pharmacy and lab dashboards, replacing heavy Redux boilerplate and deep prop-drilling trees with clean, react-hook subscribers.
+            Replaced clunky Redux boilerplate and deep prop drilling with lightweight Zustand stores for global state across dashboards.
           </p>
         </div>
 
@@ -152,7 +152,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Service Worker Push System</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Built an offline-ready service worker layer to negotiate Web Push API subscriptions and alerts, keeping active delivery updates synched and boosting overall courier-patient interactions by 25%.
+            Built a service worker background worker to handle Web Push notifications, giving couriers real-time delivery alerts and bumping user engagement by 25%.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ const { contact } = portfolio;
             <h3 class="font-black text-xs uppercase">Dynamic Sitemap API</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Automated clinical and public page sitemaps by writing an dynamic sitemap.xml Node.js generator script connected directly to directory indexing APIs, increasing search index coverage by 20%.
+            Wrote a Node.js script to automatically generate fresh sitemap.xml files from database routes and ping search engines, boosting organic page indexing by 20%.
           </p>
         </div>
       </div>

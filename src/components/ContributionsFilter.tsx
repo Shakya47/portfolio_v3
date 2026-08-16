@@ -137,7 +137,7 @@ export default function ContributionsFilter({ contributions = [] }: Contribution
             onClick={handleLoadMore}
             className="brutal-border brutal-shadow-sm brutal-btn-hover bg-[#2563EB] text-white px-6 py-3 font-mono text-xs font-black uppercase border-current focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-offset-2 focus-visible:ring-[#2563EB]"
           >
-            Load More Activity
+            Load More
           </button>
         </div>
       )}

@@ -7,7 +7,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
 
 <Layout 
   title="pip-it-up | Document Picture-in-Picture Toolkit" 
-  description="Deep dive into pip-it-up, a framework-agnostic core with React bindings to pop any interactive UI component into a native floating Picture-in-Picture window."
+  description="How I built pip-it-up: a React library that lets you float any interactive UI component in a native Picture-in-Picture window."
 >
   <!-- Nav -->
   <nav class="sticky top-0 z-40 bg-white dark:bg-[#0E0E10] border-b-3 border-current px-4 md:px-8 py-4 flex justify-between items-center">
@@ -38,7 +38,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
         pip-it-up
       </h1>
       <p class="text-base font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
-        A toolkit designed to pop any interactive UI component from a web application into a native, floating, always-on-top Picture-in-Picture window.
+        A lightweight React toolkit to float any component in an always-on-top desktop window without losing state or styles.
       </p>
     </header>
 
@@ -47,13 +47,13 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
       <div class="md:col-span-2 flex flex-col gap-6">
         <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">The Origin & Problem</h2>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          Standard browser Picture-in-Picture is restricted entirely to HTML5 `&lt;video&gt;` elements. For developers building rich, interactive dashboard panels, floating checklists, chat controllers, or video editors, keeping components visible while users multi-task was impossible.
+          Browser Picture-in-Picture used to be video-only. If you wanted a floating checklist, mini music player, timer, or chat window while working in other tabs, you were out of luck.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          In mid-2023, Chrome introduced the experimental <strong>Document Picture-in-Picture API</strong>, which allows opening a blank floating window that can be populated with arbitrary HTML content. However, the raw API is complex to manage, requiring manuals styles cloning, event listener bindings, and state preservation.
+          Chrome shipped the Document Picture-in-Picture API in 2023, allowing blank floating windows for any HTML. But the raw API is tricky. You have to manually copy styles, re-bind events, and figure out how to avoid losing component state.
         </p>
         <p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-          <strong>pip-it-up</strong> (documented with live previews at <a href="https://pipitup.dev" target="_blank" rel="noopener noreferrer" class="text-[#2563EB] hover:underline font-bold">pipitup.dev</a>) was created to solve these exact hurdles. It provides a simple React wrapper that abstracts the low-level DOM detaches, style mirrors, and auto-sizing observers, enabling standard component trees to be popped out with zero extra configuration.
+          I built <strong>pip-it-up</strong> (live at <a href="https://pipitup.dev" target="_blank" rel="noopener noreferrer" class="text-[#2563EB] hover:underline font-bold">pipitup.dev</a>) to handle all that tedious plumbing. You wrap your component in a simple React tag, and it pops out cleanly without breaking state or styles.
         </p>
       </div>
 
@@ -91,7 +91,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
 
     <!-- Technical Architecture -->
     <section id="technical-deep-dive" class="flex flex-col gap-6">
-      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">Technical Deep Dive</h2>
+      <h2 class="text-xl font-black border-b-2 border-current pb-2 uppercase text-[#2563EB]">How It Works Under the Hood</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- ResizeObserver -->
@@ -101,7 +101,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
             <h3 class="font-black text-xs uppercase">Auto-Sizing via ResizeObserver</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            A native Document PiP window must be opened with hardcoded dimensions. To prevent truncated content or large empty gaps, `pip-it-up` runs a `ResizeObserver` on the target component, dynamically resizing the floating window in real time whenever internal element heights change.
+            PiP windows require fixed dimensions when they open. If your component content grows or shrinks, you get scrollbars or wasted space. pip-it-up attaches a ResizeObserver to track height changes and resizes the window on the fly.
           </p>
         </div>
 
@@ -112,7 +112,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
             <h3 class="font-black text-xs uppercase">Style Sync via MutationObserver</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Since the floating PiP window uses a separate browser document, standard stylesheet references are lost. `pip-it-up` automatically copies all `style` and `link` tags into the PiP window, and uses a `MutationObserver` on the parent document's head to copy styling updates (like Tailwind theme swaps) dynamically.
+            Because the PiP window has its own document, styles don't carry over by default. pip-it-up copies existing style and link tags over, and watches document.head so dark mode toggles or runtime CSS updates sync immediately.
           </p>
         </div>
 
@@ -123,7 +123,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
             <h3 class="font-black text-xs uppercase">State Preservation via DOM Detach</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            Traditional popup windows re-render from scratch, losing input cursor focus, undo stacks, and transient component state. `pip-it-up` dynamically moves the active DOM nodes into the PiP window frame rather than duplicating them, keeping state and references intact.
+            If you re-mount a component from scratch, users lose input focus, form draft text, and scroll position. Instead of re-rendering, pip-it-up moves the existing DOM nodes directly into the new window, keeping state untouched.
           </p>
         </div>
 
@@ -134,7 +134,7 @@ import { ArrowLeft, Github, ExternalLink, ShieldCheck, Zap, Maximize2, RefreshCw
             <h3 class="font-black text-xs uppercase">Graceful Browser Fallbacks</h3>
           </div>
           <p class="text-[11px] leading-relaxed text-zinc-500">
-            For browser engines that do not natively implement `documentPictureInPicture` (such as Safari and Firefox), the library falls back gracefully to a customizable simulated floating overlay or a modal portal, maintaining identical logic and interfaces.
+            Safari and Firefox don't support Document PiP yet. When a user is on those browsers, pip-it-up falls back to a floating in-page overlay so nothing breaks.
           </p>
         </div>
       </div>
