@@ -167,7 +167,7 @@ export const portfolioData: Record<string, LocalizedPortfolio> = {
   en: {
     profile: {
       name: "Saurabh Shakya",
-      title: "Frontend Engineer",
+      title: "Software Engineer",
       experienceYears: calculateTotalExperience(enExperience),
       pitch: "I build fast, clean web apps with React and TypeScript. I care a lot about good UX, small bundle sizes, and building things that actually feel nice to use. Creator of pip-it-up.",
       location: "Bengaluru, India",
@@ -282,7 +282,7 @@ export const portfolioData: Record<string, LocalizedPortfolio> = {
     ],
     contact: {
       headline: "LET'S WORK TOGETHER",
-      desc: "I'm looking for frontend and full-stack roles with teams building great products. If you care about fast load times, clean code, and solid UX, let's chat.",
+      desc: "I'm looking for software engineering roles with teams building great products. If you care about fast load times, clean code, and solid UX, let's chat.",
       email: "saurabhsh47g@gmail.com",
       linkedin: "https://linkedin.com/in/shakya47",
       github: "https://github.com/shakya47",
